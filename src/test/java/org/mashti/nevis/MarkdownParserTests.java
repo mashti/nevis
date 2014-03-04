@@ -1,3 +1,19 @@
+/**
+ * This file is part of nevis.
+ *
+ * nevis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * nevis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with nevis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.mashti.nevis;
 
 import java.io.File;
@@ -18,14 +34,14 @@ import org.mashti.nevis.element.Node;
  * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
  */
 @RunWith(Parameterized.class)
-public class MarkdownParserTest {
+public class MarkdownParserTests {
 
     private static final Collection<File> md_files = FileUtils.listFiles(new File("src/test/resources/pegdown_tests/MarkdownTest103"), new String[] {"md"}, false);
     private final File md_file;
     private final File html_file;
     private MarkdownParser parser;
 
-    public MarkdownParserTest(File md_file, File html_file) {
+    public MarkdownParserTests(File md_file, File html_file) {
 
         this.md_file = md_file;
         this.html_file = html_file;

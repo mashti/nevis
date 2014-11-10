@@ -14,40 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with nevis.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.mashti.nevis.processor;
 
-import org.mashti.nevis.Parser;
-import org.mashti.nevis.element.Link;
-import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
+package org.mashti.nevis.processor;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.mashti.nevis.Parser;
+import org.mashti.nevis.element.Image;
+import org.mashti.nevis.element.Node;
+import org.mashti.nevis.element.Processor;
 
 /** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
-public class LinkProcessor extends Processor {
+public class ImageProcessor extends Processor {
 
-    private static final Pattern NEW_LINE_IN_TEXT = Pattern.compile(" *\\n");
+    public ImageProcessor() {
 
-    public LinkProcessor() {
-
-        super(Pattern.compile("(?<!\\\\)\\[(.*?)(?<!\\\\)\\](?: *\\n*(?<!\\\\)\\[(.*?)(?<!\\\\)\\])?", Pattern.DOTALL));
+        super(Pattern.compile("!\\[(.+?)\\]([ ]*\\[(.*)\\])?", Pattern.MULTILINE));
     }
 
     @Override
     public void process(Node parent, final Matcher matcher, Parser parser) {
 
-        String id = matcher.group(2);
-        final String match = matcher.group();
-        final String text = matcher.group(1);
-
-        final Link link = new Link(parent, null);
+        final String alt = matcher.group(1);
+        String id = matcher.group(3);
         if (id == null || id.trim().isEmpty()) {
-            id = NEW_LINE_IN_TEXT.matcher(text).replaceAll(" ");
+            id = alt;
         }
-        link.setMatch(match);
-        link.setId(id);
-        parser.parseInline(link, text);
-        parent.addChild(link);
+
+        final Image image = new Image(parent, null);
+        image.setAlt(alt);
+        image.setId(id);
+        parent.addChild(image);
     }
 }

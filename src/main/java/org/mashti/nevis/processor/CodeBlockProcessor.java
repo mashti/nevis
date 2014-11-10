@@ -16,13 +16,14 @@
  */
 package org.mashti.nevis.processor;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.CodeBlock;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Processor;
 import org.mashti.nevis.element.Text;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
 public class CodeBlockProcessor extends Processor {

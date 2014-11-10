@@ -16,12 +16,13 @@
  */
 package org.mashti.nevis.processor;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.BreakLine;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Processor;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
 public class BreakLineProcessor extends Processor {

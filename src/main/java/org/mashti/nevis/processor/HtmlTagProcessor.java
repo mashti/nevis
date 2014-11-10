@@ -16,61 +16,43 @@
  */
 package org.mashti.nevis.processor;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Html;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Processor;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class HtmlTagProcessor extends Processor {
+
+
+    private static final String TAG = "(?:"
+            + "a|em|strong|small|s|cite|q|dfn|abbr|data|time|code"
+            + "|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo"
+            + "|span|br|wbr|ins|del|img|hr|div|h[1-6]|p|blockquote"
+            + "|pre|table|dl|ol|ul|script|noscript|form|fieldset"
+            + "|iframe|math|ins)";
+
+    private static final String COMMENT = "<!--[\\s\\S]*?-->";
+    private static final String CLOSED = "<(" + TAG +
+            ").*?</\\1>";
+    private static final String CLOSING = "<" + TAG +
+            "(?:\"[^\"]*\"|'[^']*'|[^'\">])*?>";
+    public static final String PATTERN_1 = "^ *(?:" +
+            COMMENT +
+            "|" +
+            CLOSED +
+            "|" +
+            CLOSING +
+            ") *(?:\\n{2,}|\\s*$)";
 
     public HtmlTagProcessor() {
 
-        super(Pattern.compile("(" +
-                "^<(" + "p|div|h1|h2|h3|h4|h5|h6|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del|span}" + ")" +
-                "\\b" +
-                "(.+\\n?)*" +
-                "</\\2>" +
-                "(\\n+|\\z))|" +
-
-                "(?:" +
-                "(?<=\\n\\n)" +
-                "|" +
-                "\\A\\n?" +
-                ")" +
-                "(" +
-                "[ ]{0," + 3 + "}" +
-                "<(hr)" +
-                "\\b" +
-                "([^<>])*?" +
-                "/?>" +
-                "[ ]*" +
-                "(?=\\n{2,}|\\Z))" +
-                "|" +
-                "(?:" +
-                "(?<=\\n\\n)" +
-                "|" +
-                "\\A\\n?" +
-                ")" +
-                "(" +
-                "[ ]{0," + 3 + "}" +
-                "(?s:" +
-                "<!" +
-                "(--.*?--\\s*)+" +
-                ">" +
-                ")" +
-                "[ ]*" +
-                "(?=\\n{2,}|\\Z)|" + "(" +
-                "^" +
-                "<(" + "p|div|h1|h2|h3|h4|h5|h6|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del" + ")" +
-                "\\b" +
-                "(.*\\n)*?" +
-                ".*</\\2>" +
-                "[ ]*" +
-                "(?=\\n+|\\Z))" +
-                ")", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE));
+        super(Pattern.compile(PATTERN_1, Pattern.DOTALL | Pattern.CASE_INSENSITIVE));
     }
 
     @Override

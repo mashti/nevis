@@ -16,9 +16,10 @@
  */
 package org.mashti.nevis.element;
 
+import org.mashti.nevis.Parser;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.mashti.nevis.Parser;
 
 /** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
 public abstract class Processor {

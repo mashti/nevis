@@ -19,22 +19,22 @@ package org.mashti.nevis.element;
 /**
  * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
  */
-public class Link extends Node {
+public class Image extends Node {
 
-    private final String destination;
+    private final String source;
     private String title;
+    private String alt;
     private String id;
-    private String match;
 
-    public Link(Node parent, String destination) {
+    public Image(Node parent, String source) {
 
         super(parent);
-        this.destination = destination;
+        this.source = source;
     }
 
-    public String getDestination() {
+    public String getSource() {
 
-        return destination;
+        return source;
     }
 
     public String getTitle() {
@@ -57,19 +57,21 @@ public class Link extends Node {
         this.id = id;
     }
 
-    public String getMatch() {
-        return match;
-    }
+    public Image copy() {
 
-    public void setMatch(String match) {
-        this.match = match;
-    }
-
-    public Link copy() {
-
-        final Link copy = new Link(getParent(), getDestination());
+        final Image copy = new Image(getParent(), getSource());
         copy.setTitle(getTitle());
         copy.setId(getId());
         return copy;
+    }
+
+    public String getAlt() {
+
+        return alt;
+    }
+
+    public void setAlt(final String alt) {
+
+        this.alt = alt;
     }
 }

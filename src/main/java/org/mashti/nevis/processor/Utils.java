@@ -16,9 +16,10 @@
  */
 package org.mashti.nevis.processor;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)

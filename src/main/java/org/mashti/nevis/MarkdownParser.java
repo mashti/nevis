@@ -16,32 +16,15 @@
  */
 package org.mashti.nevis;
 
+import org.mashti.nevis.element.Link;
+import org.mashti.nevis.element.Node;
+import org.mashti.nevis.element.Processor;
+import org.mashti.nevis.processor.*;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.mashti.nevis.element.Link;
-import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
-import org.mashti.nevis.processor.AutoLinkProcessor;
-import org.mashti.nevis.processor.BackslashEscapeProcessor;
-import org.mashti.nevis.processor.BlockQuoteProcessor;
-import org.mashti.nevis.processor.BoldProcessor;
-import org.mashti.nevis.processor.BreakLineProcessor;
-import org.mashti.nevis.processor.CodeBlockProcessor;
-import org.mashti.nevis.processor.CodeSpanProcessor;
-import org.mashti.nevis.processor.EmphasizedProcessor;
-import org.mashti.nevis.processor.HeadingProcessor;
-import org.mashti.nevis.processor.HeadingSetextProcessor;
-import org.mashti.nevis.processor.HorizontalRuleProcessor;
-import org.mashti.nevis.processor.HtmlInlineTagProcessor;
-import org.mashti.nevis.processor.HtmlTagProcessor;
-import org.mashti.nevis.processor.InlineLinkProcessor;
-import org.mashti.nevis.processor.LinkProcessor;
-import org.mashti.nevis.processor.LinkReferenceProcessor;
-import org.mashti.nevis.processor.ListProcessor;
-import org.mashti.nevis.processor.ParagraphProcessor;
-import org.mashti.nevis.processor.TextProcessor;
 
 /**
  * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
@@ -50,21 +33,22 @@ public class MarkdownParser implements Parser {
 
     static final Pattern BEGINING = Pattern.compile("^");
     static final Pattern END = Pattern.compile("$");
-    static final Pattern NEW_LINE = Pattern.compile("(\\n\\r|\\n|\\r)");
+    static final Pattern NEW_LINE = Pattern.compile("(\\n\\r|\\r|\u2424)");
     static final Pattern MARKDOWN_BLOCK = Pattern.compile("^\\s*$", Pattern.MULTILINE);
 
     private final Map<String, Link> link_references = new HashMap<String, Link>();
 
     static final Processor[] BLOCK_PROCESSORS = {
-            new LinkReferenceProcessor(), new BlockQuoteProcessor(), new HtmlTagProcessor(), new HeadingProcessor(), new HeadingSetextProcessor(), new HorizontalRuleProcessor(), new ListProcessor(), 
-            new CodeBlockProcessor(), 
+            new LinkReferenceProcessor(), new BlockQuoteProcessor(), new HtmlTagProcessor(), new HeadingProcessor(), new HeadingSetextProcessor(), new HorizontalRuleProcessor(), new ListProcessor(),
+            new CodeBlockProcessor(),
             new ParagraphProcessor()
     };
 
     static final Processor[] INLINE_PROCESSORS = {
-            new HtmlInlineTagProcessor(), new ListProcessor(), new CodeSpanProcessor(), new AutoLinkProcessor(), new BackslashEscapeProcessor(), new InlineLinkProcessor(), new LinkProcessor(), new BoldProcessor(), new EmphasizedProcessor(), new BreakLineProcessor(), new TextProcessor()
+            new HtmlInlineTagProcessor(), new ListProcessor(), new CodeSpanProcessor(), new AutoLinkProcessor(), new InlineLinkProcessor(), new LinkProcessor(), new BackslashEscapeProcessor(), new BoldProcessor(), new EmphasizedProcessor(), new BreakLineProcessor(), new TextProcessor()
     };
     private static final Pattern TAB = Pattern.compile("\\t", Pattern.MULTILINE);
+    private static final Pattern UNICODE_WHITESPACE = Pattern.compile("\u00a0", Pattern.MULTILINE);
 
     private String markdown;
 
@@ -77,14 +61,15 @@ public class MarkdownParser implements Parser {
     public Node parse() {
 
         final Node root = new Node(null);
+        sanitise();
+        parseBlock(root, markdown);
+        return root;
+    }
 
+    private void sanitise() {
         markdown = NEW_LINE.matcher(markdown).replaceAll("\n");
         markdown = TAB.matcher(markdown).replaceAll("    ");
-        parseBlock(root, markdown);
-        for (String s : link_references.keySet()) {
-            System.out.println("ID> s" + s);
-        }
-        return root;
+        markdown = UNICODE_WHITESPACE.matcher(markdown).replaceAll(" ");
     }
 
     @Override

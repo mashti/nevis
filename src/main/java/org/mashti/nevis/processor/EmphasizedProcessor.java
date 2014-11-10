@@ -16,19 +16,22 @@
  */
 package org.mashti.nevis.processor;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Emphasized;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Processor;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class EmphasizedProcessor extends Processor {
 
     public EmphasizedProcessor() {
 
-        super(Pattern.compile("(\\*|_)(?=\\S)(.+?)(?<=\\S)\\1", Pattern.MULTILINE));
+        super(Pattern.compile("(?<!\\w)(\\*|_)(.+?)\\1(?!\\w)", Pattern.MULTILINE));
     }
 
     @Override
@@ -39,5 +42,4 @@ public class EmphasizedProcessor extends Processor {
         parser.parseInline(emphasized, value);
         parent.addChild(emphasized);
     }
-
 }

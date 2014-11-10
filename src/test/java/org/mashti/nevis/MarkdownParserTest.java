@@ -16,10 +16,6 @@
  */
 package org.mashti.nevis;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
@@ -30,34 +26,62 @@ import org.junit.runners.Parameterized;
 import org.mashti.nevis.element.HtmlSerializer;
 import org.mashti.nevis.element.Node;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
+
 /**
  * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
  */
 @RunWith(Parameterized.class)
-public class MarkdownParserTests {
+public class MarkdownParserTest {
 
-    private static final Collection<File> md_files = FileUtils.listFiles(new File("src/test/resources/pegdown_tests/MarkdownTest103"), new String[] {"md"}, false);
+    private String flavour;
     private final File md_file;
     private final File html_file;
     private MarkdownParser parser;
 
-    public MarkdownParserTests(File md_file, File html_file) {
+    public MarkdownParserTest(String flavour, File md_file, File html_file) {
 
+        this.flavour = flavour;
         this.md_file = md_file;
         this.html_file = html_file;
     }
 
-    @Parameterized.Parameters(name = "{index} {0}")
-    public static Collection<Object[]> data() {
+    @Parameterized.Parameters(name = "{index} {0}: {1}")
+    public static Collection<Object[]> data() throws URISyntaxException, IOException {
 
-        final List<Object[]> params = new ArrayList<Object[]>();
-        for (File md_file : md_files) {
+        final List<Object[]> params = new ArrayList<>();
 
-            params.add(new Object[] {
-                    md_file, new File(md_file.getParent(), FilenameUtils.getBaseName(md_file.getAbsolutePath()) + ".html")
+        final Path flavours = Paths.get(MarkdownParserTest.class.getResource("/flavours").toURI());
+
+        final Stream<Path> list = Files.list(flavours);
+
+        list.forEach(flavour -> {
+
+            final String flavour_name = flavour.getFileName().toString();
+
+            getMarkdownFiles(flavour.toFile()).forEach(md_file -> {
+                params.add(new Object[]{flavour_name, md_file, getHtmlFile(md_file)});
             });
-        }
+
+        });
         return params;
+    }
+
+    private static File getHtmlFile(File md_file) {
+        return new File(md_file.getParent(), FilenameUtils.getBaseName(md_file.getAbsolutePath()) + ".html");
+    }
+
+    private static Collection<File> getMarkdownFiles(File flavour_directory) {
+        return FileUtils.listFiles(flavour_directory, new String[]{"md"}, true);
     }
 
     @Before

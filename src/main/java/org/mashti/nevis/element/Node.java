@@ -17,7 +17,6 @@
 package org.mashti.nevis.element;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -26,12 +25,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Node {
 
     private Node parent;
-    private final List<Node> children;
+    private final java.util.List<Node> children;
 
     public Node(Node parent) {
 
         this.parent = parent;
-        children = new ArrayList<Node>();
+        children = new ArrayList<>();
     }
 
     public Node getParent() {
@@ -39,7 +38,7 @@ public class Node {
         return parent;
     }
 
-    public List<Node> getChildren() {
+    public java.util.List<Node> getChildren() {
 
         return new CopyOnWriteArrayList<Node>(children);
     }

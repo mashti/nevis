@@ -67,5 +67,8 @@ breaks] across lines.
 Here's another where the [link 
 breaks] across lines, but with a line-ending space.
 
+Here's another where the [link   
+
+breaks] across lines, but with a line-ending space.
 
 [link breaks]: /url/

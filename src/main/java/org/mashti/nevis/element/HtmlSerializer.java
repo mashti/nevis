@@ -108,6 +108,7 @@ public class HtmlSerializer implements Visitor {
         html.append("</h" + heading.getLevel() + ">\n");
     }
 
+
     public void visit(Text text) {
 
         final String value = text.getValue();
@@ -172,7 +173,7 @@ public class HtmlSerializer implements Visitor {
 
         html.append("\n<blockquote>\n");
         visit((Node) code);
-        html.append("</blockquote>\n");
+        html.append("</blockquote>");
     }
 
     public void visit(Emphasized emphasized) {
@@ -193,14 +194,14 @@ public class HtmlSerializer implements Visitor {
                 link.setTitle(linkReference.getTitle());
             }
             else {
-                html.append("[").append(id).append("] []");
+                html.append(link.getMatch());
                 return;
             }
         }
 
         html.append("<a href=\"");
         html.append(Utils.escapeHtml(destination));
-        html.append("\"");
+        html.append('"');
         //        if (id != null && !id.trim().isEmpty()) {
         //            html.append(" id=\"");
         //            html.append(id);
@@ -209,9 +210,9 @@ public class HtmlSerializer implements Visitor {
         if (link.getTitle() != null) {
             html.append(" title=\"");
             html.append(Utils.escapeHtml(link.getTitle()));
-            html.append("\"");
+            html.append('"');
         }
-        html.append(">");
+        html.append('>');
         visit((Node) link);
         html.append("</a>");
     }

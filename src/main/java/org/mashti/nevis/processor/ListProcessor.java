@@ -16,14 +16,15 @@
  */
 package org.mashti.nevis.processor;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.List;
 import org.mashti.nevis.element.ListItem;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Processor;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
 public class ListProcessor extends Processor {
@@ -32,7 +33,7 @@ public class ListProcessor extends Processor {
 
         //        super(Pattern.compile("(\\A|\\n{2,})(([ ]{0,3}?([-+*]|\\d+\\.)[ ]+(.*?))+)", Pattern.DOTALL));
         super(Pattern.compile("^" +
-//                "(\\A|\\n{2,})" +
+                "(\\A|\\n{2,})" +
                 "(" +
                 "(" +
                 "[ ]{0," + 3 + "}" +
@@ -48,7 +49,7 @@ public class ListProcessor extends Processor {
                 "(?![ ]*" +
                 "(?:[-+*]|\\d+[.])" +
                 "[ ]+" +
-                ")" + // negative lookahead for another list marker
+                ")" + // negative look ahead for another list marker
                 ")" +
                 ")", Pattern.MULTILINE));
     }
@@ -57,7 +58,7 @@ public class ListProcessor extends Processor {
     public void process(Node parent, final Matcher matcher, Parser parser) {
 
         final String first_marker = matcher.group(3);
-        String items = matcher.group(1);
+        String items = matcher.group(2);
         items = Pattern.compile("\\n{2,}").matcher(items).replaceAll("\n\n\n");
         final List list = new List(parent, !StringUtils.containsAny(first_marker, new char[] {'-', '+', '*'}));
        

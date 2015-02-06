@@ -19,36 +19,32 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.CodeBlock;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
 import org.mashti.nevis.element.Text;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class CodeBlockProcessor extends Processor {
 
     private static final Pattern TABS = Pattern.compile("^(\\s{4}|\\t)");
 
     public CodeBlockProcessor() {
 
-        super(Pattern.compile("" +
-                "(?:\\n\\n|\\A)" +
-                "((?:" +
-                "(?:[ ]{4})" +
-                ".*\\n+" +
-                ")+" +
-                ")" +
-                "((?=^[ ]{0,4}\\S)|\\Z)", Pattern.MULTILINE));
+        super(Pattern.compile("^( {4}[^\\n]+\\n*)+"));
     }
 
     @Override
-    public void process(Node parent, final Matcher matcher, Parser parser) {
+    public Optional<Node> process(final Matcher matcher, Parser parser) {
 
-        String value = Utils.replaceAllPerLine(TABS, matcher.group(1), "");
+        final String group = matcher.group();
+        final String value = Utils.replaceAllPerLine(TABS, group, "");
 
-        final CodeBlock code = new CodeBlock(parent);
-        code.addChild(new Text(code, Utils.removeStartAndEndNewLines(value)));
-        parent.addChild(code);
+        final CodeBlock code = new CodeBlock();
+        code.addChild(new Text(Utils.removeStartAndEndNewLines(value)));
+        return Optional.of(code);
     }
 }

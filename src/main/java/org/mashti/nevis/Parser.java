@@ -16,7 +16,7 @@
  */
 package org.mashti.nevis;
 
-import org.mashti.nevis.element.Link;
+import org.mashti.nevis.element.LinkDefinition;
 import org.mashti.nevis.element.Node;
 
 /**
@@ -29,9 +29,4 @@ public interface Parser {
     void parseBlock(Node parent, String value);
 
     void parseInline(Node parent, String value);
-
-    Link referenceLink(String id, Link link);
-
-    Link getLinkReference(String id);
-    
 }

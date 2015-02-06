@@ -21,20 +21,24 @@ package org.mashti.nevis.element;
  */
 public class Image extends Node {
 
-    private final String source;
+    private String source;
     private String title;
     private String alt;
     private String id;
+    private String match;
 
-    public Image(Node parent, String source) {
+    public Image(String source) {
 
-        super(parent);
         this.source = source;
     }
 
     public String getSource() {
 
         return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getTitle() {
@@ -57,14 +61,6 @@ public class Image extends Node {
         this.id = id;
     }
 
-    public Image copy() {
-
-        final Image copy = new Image(getParent(), getSource());
-        copy.setTitle(getTitle());
-        copy.setId(getId());
-        return copy;
-    }
-
     public String getAlt() {
 
         return alt;
@@ -73,5 +69,13 @@ public class Image extends Node {
     public void setAlt(final String alt) {
 
         this.alt = alt;
+    }
+
+    public String getMatch() {
+        return match;
+    }
+
+    public void setMatch(String match) {
+        this.match = match;
     }
 }

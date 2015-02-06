@@ -19,8 +19,8 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Emphasized;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,15 +31,19 @@ public class EmphasizedProcessor extends Processor {
 
     public EmphasizedProcessor() {
 
-        super(Pattern.compile("(?<!\\w)(\\*|_)(.+?)\\1(?!\\w)", Pattern.MULTILINE));
+        super(Pattern.compile("^\\b_((?:__|[\\s\\S])+?)_\\b|^\\*((?:\\*\\*|[\\s\\S])+?)\\*(?!\\*)"));
     }
 
     @Override
-    public void process(Node parent, final Matcher matcher, Parser parser) {
+    public Optional<Node> process(final Matcher matcher, Parser parser) {
 
-        final String value = matcher.group(2);
-        final Emphasized emphasized = new Emphasized(parent);
+        String value = matcher.group(2);
+        if(value == null){
+            
+            value = matcher.group(1);
+        }
+        final Emphasized emphasized = new Emphasized();
         parser.parseInline(emphasized, value);
-        parent.addChild(emphasized);
+        return Optional.of(emphasized);
     }
 }

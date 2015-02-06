@@ -21,16 +21,19 @@ package org.mashti.nevis.element;
  */
 public class Text extends Node {
 
-    private final String value;
+    private String value;
 
-    public Text(Node parent, String value) {
+    public Text(String value) {
 
-        super(parent);
         this.value = value;
     }
 
     public String getValue() {
 
         return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

@@ -21,9 +21,4 @@ package org.mashti.nevis.element;
 */
 public class Emphasized extends Node {
 
-
-    public Emphasized(Node parent) {
-
-        super(parent);
-    }
 }

@@ -21,8 +21,4 @@ package org.mashti.nevis.element;
 */
 public class Paragraph extends Node {
 
-    public Paragraph(Node parent) {
-
-        super(parent);
-    }
 }

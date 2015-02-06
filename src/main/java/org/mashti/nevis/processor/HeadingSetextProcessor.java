@@ -19,31 +19,32 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Heading;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
 import org.mashti.nevis.element.Text;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class HeadingSetextProcessor extends Processor {
 
     public HeadingSetextProcessor() {
 
-        super(Pattern.compile("^(.+)\\n(-|=)+$", Pattern.MULTILINE));
+        super(Pattern.compile("^([^\\n]+)\\n *(=|-){2,} *(?:\\n+|$)"));
     }
 
     @Override
-    public void process(Node parent, final Matcher matcher, Parser parser) {
+    public Optional<Node> process(final Matcher matcher, Parser parser) {
 
         final String level_group = matcher.group(2);
         final int level = level_group.startsWith("-") ? 2 : 1;
         final String content = matcher.group(1);
-        final Heading heading = new Heading(parent, level);
+        final Heading heading = new Heading(level);
 
-        heading.addChild(new Text(heading, content));
-        parent.addChild(heading);
-
+        heading.addChild(new Text(content));
+        return Optional.of(heading);
     }
 
 }

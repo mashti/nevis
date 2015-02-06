@@ -22,8 +22,4 @@ package org.mashti.nevis.element;
 public class Bold extends Node {
 
 
-    public Bold(Node parent) {
-
-        super(parent);
-    }
 }

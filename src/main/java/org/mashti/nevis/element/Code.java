@@ -22,8 +22,4 @@ package org.mashti.nevis.element;
 public class Code extends Node {
 
 
-    public Code(Node parent) {
-
-        super(parent);
-    }
 }

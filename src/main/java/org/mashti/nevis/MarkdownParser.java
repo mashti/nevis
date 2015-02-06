@@ -16,13 +16,10 @@
  */
 package org.mashti.nevis;
 
-import org.mashti.nevis.element.Link;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
 import org.mashti.nevis.processor.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,36 +28,52 @@ import java.util.regex.Pattern;
  */
 public class MarkdownParser implements Parser {
 
-    static final Pattern BEGINING = Pattern.compile("^");
-    static final Pattern END = Pattern.compile("$");
     static final Pattern NEW_LINE = Pattern.compile("(\\n\\r|\\r|\u2424)");
-    static final Pattern MARKDOWN_BLOCK = Pattern.compile("^\\s*$", Pattern.MULTILINE);
-
-    private final Map<String, Link> link_references = new HashMap<String, Link>();
 
     static final Processor[] BLOCK_PROCESSORS = {
-            new LinkReferenceProcessor(), new BlockQuoteProcessor(), new HtmlTagProcessor(), new HeadingProcessor(), new HeadingSetextProcessor(), new HorizontalRuleProcessor(), new ListProcessor(),
+            new NewLineProcessor(),
             new CodeBlockProcessor(),
+            new ImageProcessor(),
+            new DefinitionProcessor(),
+            new BlockQuoteProcessor(),
+            new HtmlTagProcessor(),
+            new HeadingProcessor(),
+            new HeadingSetextProcessor(),
+            new HorizontalRuleProcessor(),
+            new ListProcessor(),
             new ParagraphProcessor()
     };
 
     static final Processor[] INLINE_PROCESSORS = {
-            new HtmlInlineTagProcessor(), new ListProcessor(), new CodeSpanProcessor(), new AutoLinkProcessor(), new InlineLinkProcessor(), new LinkProcessor(), new BackslashEscapeProcessor(), new BoldProcessor(), new EmphasizedProcessor(), new BreakLineProcessor(), new TextProcessor()
+            new EscapeProcessor(),
+            new HtmlInlineTagProcessor(),
+            new ListProcessor(),
+            new InlineCodeProcessor(),
+            new AutoLinkProcessor(),
+            new InlineLinkImageProcessor(),
+            new InlineLinkProcessor(),
+            new InlineLinkImageReferenceProcessor(),
+            new LinkProcessor(),
+            new StrongProcessor(),
+            new EmphasizedProcessor(),
+            new BreakLineProcessor(),
+            new TextProcessor()
     };
-    private static final Pattern TAB = Pattern.compile("\\t", Pattern.MULTILINE);
+
     private static final Pattern UNICODE_WHITESPACE = Pattern.compile("\u00a0", Pattern.MULTILINE);
+    private static final Pattern TAB = Pattern.compile("\\t");
+
 
     private String markdown;
 
     public MarkdownParser(String markdown) {
-
         this.markdown = markdown;
     }
 
     @Override
     public Node parse() {
 
-        final Node root = new Node(null);
+        final Node root = new Node();
         sanitise();
         parseBlock(root, markdown);
         return root;
@@ -68,84 +81,66 @@ public class MarkdownParser implements Parser {
 
     private void sanitise() {
         markdown = NEW_LINE.matcher(markdown).replaceAll("\n");
-        markdown = TAB.matcher(markdown).replaceAll("    ");
         markdown = UNICODE_WHITESPACE.matcher(markdown).replaceAll(" ");
+        markdown = TAB.matcher(markdown).replaceAll("    ");
+        markdown = Pattern.compile("^ *$", Pattern.MULTILINE).matcher(markdown).replaceAll("");
     }
 
     @Override
-    public void parseBlock(final Node parent, final String value) {
+    public void parseBlock(final Node parent, String value) {
 
-        boolean matched = false;
-        for (Processor processor : BLOCK_PROCESSORS) {
+        while (!value.isEmpty()) {
 
-            final Pattern element = processor.pattern();
-            final Matcher matcher = element.matcher(value);
+            for (Processor processor : BLOCK_PROCESSORS) {
 
-            matched = matcher.find();
-            if (matched) {
+                final Pattern pattern = processor.pattern();
+                final Matcher matcher = pattern.matcher(value);
 
-                String first_bit = value.substring(0, matcher.start());
-                if (!first_bit.trim().isEmpty()) {
-                    parseBlock(parent, first_bit);
+
+                if (matcher.find()) {
+
+                    if (matcher.start() != 0) {
+                        throw new RuntimeException("block processor " + processor);
+                    }
+
+                    value = value.substring(matcher.end());
+
+                    final Optional<Node> child = processor.process(matcher, this);
+                    if (child.isPresent()) {
+                        parent.addChild(child.get());
+                    }
+                    break;
                 }
-
-                processor.process(parent, matcher, this);
-
-                String last_bit = value.substring(matcher.end());
-                if (!last_bit.trim().isEmpty()) {
-                    parseBlock(parent, last_bit);
-                }
-
-                break;
             }
         }
-        if (!matched) {
-            System.err.println("NO MATCH FOR BLOCK: " + value);
-        }
     }
 
     @Override
-    public void parseInline(final Node parent, final String value) {
+    public void parseInline(final Node parent, String value) {
 
-        boolean matched = false;
-        for (Processor processor : INLINE_PROCESSORS) {
+        while (!value.isEmpty()) {
 
-            final Pattern element = processor.pattern();
-            final Matcher matcher = element.matcher(value);
+            for (Processor processor : INLINE_PROCESSORS) {
 
-            matched = matcher.find();
-            if (matched) {
+                final Pattern pattern = processor.pattern();
+                final Matcher matcher = pattern.matcher(value);
 
-                String first_bit = value.substring(0, matcher.start());
-                if (!first_bit.isEmpty()) {
-                    parseInline(parent, first_bit);
+
+                if (matcher.find()) {
+
+                    if (matcher.start() != 0) {
+                        throw new RuntimeException("inline processor " + processor);
+                    }
+
+                    value = value.substring(matcher.end());
+
+                    final Optional<Node> child = processor.process(matcher, this);
+                    if (child.isPresent()) {
+                        parent.addChild(child.get());
+                    }
+                    break;
                 }
-
-                processor.process(parent, matcher, this);
-
-                String last_bit = value.substring(matcher.end());
-                if (!last_bit.isEmpty()) {
-                    parseInline(parent, last_bit);
-                }
-
-                break;
             }
         }
-        if (!matched) {
-            System.err.println("NO MATCH FOR INLINE: " + value);
-        }
-    }
-
-    @Override
-    public Link referenceLink(final String id, final Link link) {
-
-        return link_references.put(id, link);
-    }
-
-    @Override
-    public Link getLinkReference(final String id) {
-
-        final Link link = link_references.get(id);
-        return link == null ? null : link.copy();
     }
 }

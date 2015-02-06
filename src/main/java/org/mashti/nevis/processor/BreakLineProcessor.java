@@ -19,8 +19,8 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.BreakLine;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,13 +29,12 @@ public class BreakLineProcessor extends Processor {
 
     public BreakLineProcessor() {
 
-        super(Pattern.compile(" {2,}\\n", Pattern.MULTILINE));
+        super(Pattern.compile("^ {2,}\\n(?!\\s*$)"));
     }
 
     @Override
-    public void process(Node parent, final Matcher matcher, Parser parser) {
+    public Optional<Node> process(final Matcher matcher, Parser parser) {
 
-        final BreakLine bold = new BreakLine(parent);
-        parent.addChild(bold);
+        return Optional.of(new BreakLine());
     }
 }

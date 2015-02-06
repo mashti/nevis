@@ -19,8 +19,8 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Html;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,11 +56,10 @@ public class HtmlTagProcessor extends Processor {
     }
 
     @Override
-    public void process(Node parent, final Matcher matcher, Parser parser) {
+    public Optional<Node> process(final Matcher matcher, Parser parser) {
 
         final String content = matcher.group();
-        final Html html = new Html(parent, Utils.removeStartAndEndNewLines(content));
+        return Optional.of(new Html(Utils.removeStartAndEndNewLines(content)));
 
-        parent.addChild(html);
     }
 }

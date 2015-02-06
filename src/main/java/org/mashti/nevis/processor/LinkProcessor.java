@@ -19,35 +19,37 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Link;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class LinkProcessor extends Processor {
 
     private static final Pattern NEW_LINE_IN_TEXT = Pattern.compile(" *\\n");
 
     public LinkProcessor() {
 
-        super(Pattern.compile("(?<!\\\\)\\[(.*?)(?<!\\\\)\\](?: *\\n*(?<!\\\\)\\[(.*?)(?<!\\\\)\\])?", Pattern.DOTALL));
+        super(Pattern.compile("^(?<!\\\\)\\[(.*?)(?<!\\\\)\\](?: *\\n*(?<!\\\\)\\[(.*?)(?<!\\\\)\\])?", Pattern.DOTALL));
     }
 
     @Override
-    public void process(Node parent, final Matcher matcher, Parser parser) {
+    public Optional<Node> process(final Matcher matcher, Parser parser) {
 
         String id = matcher.group(2);
         final String match = matcher.group();
         final String text = matcher.group(1);
 
-        final Link link = new Link(parent, null);
+        final Link link = new Link(null);
         if (id == null || id.trim().isEmpty()) {
             id = NEW_LINE_IN_TEXT.matcher(text).replaceAll(" ");
         }
         link.setMatch(match);
         link.setId(id);
         parser.parseInline(link, text);
-        parent.addChild(link);
+        return Optional.of(link);
     }
 }

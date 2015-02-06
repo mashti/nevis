@@ -16,6 +16,7 @@
  */
 package org.mashti.nevis;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
@@ -26,6 +27,7 @@ import java.io.OutputStream;
 /**
  * @author masih
  */
+@Ignore
 public class HtmlToPdfTest {
 
     @Test

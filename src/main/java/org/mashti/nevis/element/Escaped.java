@@ -21,9 +21,4 @@ package org.mashti.nevis.element;
 */
 public class Escaped extends Node {
 
-
-    public Escaped(Node parent) {
-
-        super(parent);
-    }
 }

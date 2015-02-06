@@ -19,12 +19,14 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Paragraph;
-import org.mashti.nevis.element.Processor;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class ParagraphProcessor extends Processor {
 
     public ParagraphProcessor() {
@@ -33,13 +35,14 @@ public class ParagraphProcessor extends Processor {
     }
 
     @Override
-    public void process(Node parent, final Matcher matcher, Parser parser) {
+    public Optional<Node> process(final Matcher matcher, Parser parser) {
 
         final String content = matcher.group(2);
-        final Paragraph paragraph = new Paragraph(parent);
+        final Paragraph paragraph = new Paragraph();
         if (!content.trim().isEmpty()) {
-            parser.parseInline(paragraph, Utils.removeStartAndEndNewLines(content)); }
-        parent.addChild(paragraph);
+            parser.parseInline(paragraph, Utils.removeStartAndEndNewLines(content));
+        }
+        return Optional.of(paragraph);
     }
 
 }

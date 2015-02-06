@@ -16,7 +16,11 @@
  */
 package org.mashti.nevis.element;
 
+import org.mashti.nevis.visitor.Visitor;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -24,23 +28,30 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Node {
 
-    private Node parent;
-    private final java.util.List<Node> children;
+    private java.util.List<Node> children;
+    private Map<String, String> attributes;
 
-    public Node(Node parent) {
+    public Node() {
 
-        this.parent = parent;
         children = new ArrayList<>();
+        attributes = new HashMap<>();
     }
 
-    public Node getParent() {
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
 
-        return parent;
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
     }
 
     public java.util.List<Node> getChildren() {
 
         return new CopyOnWriteArrayList<Node>(children);
+    }
+
+    public void setChildren(java.util.List<Node> children) {
+        this.children = children;
     }
 
     public boolean addChild(Node child) {
@@ -49,12 +60,6 @@ public class Node {
     }
 
     public void accept(Visitor visitor) {
-
         visitor.visit(this);
-    }
-
-    public void setParent(final Node parent) {
-
-        this.parent = parent;
     }
 }

@@ -17,23 +17,26 @@
 
 package org.mashti.nevis.processor;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Image;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class ImageProcessor extends Processor {
 
     public ImageProcessor() {
 
-        super(Pattern.compile("!\\[(.+?)\\]([ ]*\\[(.*)\\])?", Pattern.MULTILINE));
+        super(Pattern.compile("^!\\[(.+?)\\]([ ]*\\[(.*)\\])?"));
     }
 
     @Override
-    public void process(Node parent, final Matcher matcher, Parser parser) {
+    public Optional<Node> process(final Matcher matcher, Parser parser) {
 
         final String alt = matcher.group(1);
         String id = matcher.group(3);
@@ -41,9 +44,9 @@ public class ImageProcessor extends Processor {
             id = alt;
         }
 
-        final Image image = new Image(parent, null);
+        final Image image = new Image(null);
         image.setAlt(alt);
         image.setId(id);
-        parent.addChild(image);
+        return Optional.of(image);
     }
 }

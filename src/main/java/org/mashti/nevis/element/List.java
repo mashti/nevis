@@ -17,20 +17,23 @@
 package org.mashti.nevis.element;
 
 /**
-* @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
-*/
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class List extends Node {
 
-    private final boolean ordered;
+    private boolean ordered;
 
-    public List(Node parent, boolean ordered) {
+    public List(boolean ordered) {
 
-        super(parent);
         this.ordered = ordered;
     }
 
     public boolean isOrdered() {
 
         return ordered;
+    }
+
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
     }
 }

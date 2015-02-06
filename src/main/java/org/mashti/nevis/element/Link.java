@@ -21,20 +21,23 @@ package org.mashti.nevis.element;
  */
 public class Link extends Node {
 
-    private final String destination;
+    private String destination;
     private String title;
     private String id;
     private String match;
 
-    public Link(Node parent, String destination) {
+    public Link(String destination) {
 
-        super(parent);
         this.destination = destination;
     }
 
     public String getDestination() {
 
         return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
     public String getTitle() {
@@ -65,11 +68,14 @@ public class Link extends Node {
         this.match = match;
     }
 
-    public Link copy() {
 
-        final Link copy = new Link(getParent(), getDestination());
-        copy.setTitle(getTitle());
-        copy.setId(getId());
-        return copy;
+    @Override
+    public String toString() {
+        return "Link{" +
+                "destination='" + destination + '\'' +
+                ", title='" + title + '\'' +
+                ", id='" + id + '\'' +
+                ", match='" + match + '\'' +
+                '}';
     }
 }

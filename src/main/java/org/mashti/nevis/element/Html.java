@@ -17,20 +17,32 @@
 package org.mashti.nevis.element;
 
 /**
-* @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
-*/
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class Html extends Node {
 
-    private final String content;
+    private String content;
+    private boolean inline;
 
-    public Html(Node parent, String content) {
+    public Html(String content) {
 
-        super(parent);
         this.content = content;
     }
 
     public String getContent() {
 
         return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public boolean isInline() {
+        return inline;
+    }
+
+    public void setInline(boolean inline) {
+        this.inline = inline;
     }
 }

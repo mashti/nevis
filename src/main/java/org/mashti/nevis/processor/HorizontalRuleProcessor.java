@@ -19,22 +19,24 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.HorizontalRule;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class HorizontalRuleProcessor extends Processor {
 
     public HorizontalRuleProcessor() {
 
-        super(Pattern.compile("^[ ]{0,2}([ ]?(\\*|-|_)[ ]?){3,}[ ]*$", Pattern.MULTILINE));
+        super(Pattern.compile("^( {0,3}[-*_]){3,} *(?:\\n+|$)"));
     }
 
     @Override
-    public void process(Node parent, final Matcher matcher, Parser parser) {
+    public Optional<Node> process(final Matcher matcher, Parser parser) {
 
-        parent.addChild(new HorizontalRule(parent));
+        return Optional.of(new HorizontalRule());
     }
 }

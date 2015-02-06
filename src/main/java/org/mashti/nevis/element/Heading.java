@@ -21,16 +21,19 @@ package org.mashti.nevis.element;
 */
 public class Heading extends Node {
 
-    private final int level;
+    private int level;
 
-    public Heading(Node parent, int level) {
+    public Heading(int level) {
 
-        super(parent);
         this.level = level;
     }
 
     public int getLevel() {
 
         return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

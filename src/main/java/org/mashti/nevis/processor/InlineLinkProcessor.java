@@ -17,45 +17,55 @@
 package org.mashti.nevis.processor;
 
 import org.mashti.nevis.Parser;
+import org.mashti.nevis.element.Image;
 import org.mashti.nevis.element.Link;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Processor;
 import org.mashti.nevis.element.Text;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class InlineLinkProcessor extends Processor {
 
     public InlineLinkProcessor() {
 
-        super(Pattern.compile("(" +
-                "\\[(.*?)\\]" + // Link text = $2
-                "\\(" +
-                "[ \\t]*" +
-                "<?(.*?)>?" + // href = $3
-                "[ \\t]*" +
-                "(" +
-                "(['\"])" + // Quote character = $5
-                "(.*?)" + // Title = $6
-                "\\5" +
-                "[ \\t]*)?" +
-                "\\)" +
-                ")", Pattern.DOTALL));
+        super(Pattern.compile("^!?\\[((?:\\[[^\\]]*\\]|[^\\[\\]]|\\](?=[^\\[]*\\]))*)\\]\\s*\\[([^\\]]*)\\]"));
     }
 
     @Override
-    public void process(Node parent, final Matcher matcher, Parser parser) {
+    public Optional<Node> process(final Matcher matcher, Parser parser) {
 
-        final String text = matcher.group(2);
-        final String destination = matcher.group(3);
-        final String title = matcher.group(6);
 
-        final Link link = new Link(parent, destination);
-        link.setTitle(title);
-        link.addChild(new Text(link, text));
+        String id = matcher.group(2);
+        String text = matcher.group(1);
 
-        parent.addChild(link);
+        if(id.isEmpty()){
+            id = text;
+        }
+        
+        id = id.replaceAll("\\n", " ");
+        
+        final String match = matcher.group();
+
+        if (match.startsWith("!")) {
+
+            final Image image = new Image(null);
+            image.setMatch(match);
+            image.setId(id);
+            parser.parseInline(image, id);
+
+            return Optional.of(image);
+        } else {
+            final Link link = new Link(null);
+            link.setMatch(match);
+            link.setId(id);
+            parser.parseInline(link, text);
+
+            return Optional.of(link);
+        }
     }
 }

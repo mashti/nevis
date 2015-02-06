@@ -22,8 +22,4 @@ package org.mashti.nevis.element;
 public class BreakLine extends Node {
 
 
-    public BreakLine(Node parent) {
-
-        super(parent);
-    }
 }

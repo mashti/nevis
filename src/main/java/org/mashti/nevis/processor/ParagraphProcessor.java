@@ -17,6 +17,8 @@
 package org.mashti.nevis.processor;
 
 import org.mashti.nevis.Parser;
+import org.mashti.nevis.element.BlockQuote;
+import org.mashti.nevis.element.ListItem;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Paragraph;
 
@@ -31,18 +33,24 @@ public class ParagraphProcessor extends Processor {
 
     public ParagraphProcessor() {
 
-        super(Pattern.compile("(((.+(\\n)?)+)(\\n{2,}|\\z))", Pattern.MULTILINE));
+        super(Pattern.compile("^((?:[^\\n]+\\n?(?!( *[-*_]){3,} *(?:\\n+|$)| *(#{1,6}) *([^\\n]+?) *#* *(?:\\n+|$)|([^\\n]+)\\n *(=|-){2,} *(?:\\n+|$)|( *>[^\\n]+(\\n(?! *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$))[^\\n]+)*\\n*)+|<(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|[^\\w\\s@]*@)\\b| *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$)))+)\\n*"));
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
-        final String content = matcher.group(2);
+        final String content = matcher.group();
         final Paragraph paragraph = new Paragraph();
+        paragraph.setPatent(parent);
         if (!content.trim().isEmpty()) {
-            parser.parseInline(paragraph, Utils.removeStartAndEndNewLines(content));
+            parser.parse(paragraph, Utils.removeStartAndEndNewLines(content));
         }
-        return Optional.of(paragraph);
+
+        parent.addChild(paragraph);
     }
 
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() == null || parent instanceof ListItem || parent instanceof BlockQuote;
+    }
 }

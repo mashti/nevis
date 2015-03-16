@@ -36,7 +36,7 @@ public class ImageProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final String alt = matcher.group(1);
         String id = matcher.group(3);
@@ -45,8 +45,9 @@ public class ImageProcessor extends Processor {
         }
 
         final Image image = new Image(null);
+        image.setPatent(parent);
         image.setAlt(alt);
         image.setId(id);
-        return Optional.of(image);
+        parent.addChild(image);
     }
 }

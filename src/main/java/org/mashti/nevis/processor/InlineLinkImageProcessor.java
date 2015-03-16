@@ -37,7 +37,7 @@ public class InlineLinkImageProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final boolean isImage = matcher.group().startsWith("!");
         final String alt = matcher.group(1);
@@ -47,14 +47,21 @@ public class InlineLinkImageProcessor extends Processor {
 
         if (isImage) {
             final Image image = new Image(source);
+            image.setPatent(parent);
             image.setAlt(alt);
             image.setTitle(title);
-            return Optional.of(image);
+            parent.addChild(image);
         } else {
             final Link link = new Link(source);
+            link.setPatent(parent);
             link.setTitle(title);
-            parser.parseInline(link, alt);
-            return Optional.of(link);
+            parser.parse(link, alt);
+            parent.addChild(link);
         }
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null;
     }
 }

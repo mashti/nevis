@@ -17,6 +17,7 @@
 package org.mashti.nevis.processor;
 
 import org.mashti.nevis.Parser;
+import org.mashti.nevis.element.BlockQuote;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Text;
 
@@ -31,13 +32,21 @@ public class TextProcessor extends Processor {
 
     public TextProcessor() {
 
+//        super(Pattern.compile("^[^\n]+"));
         super(Pattern.compile("^[\\s\\S]+?(?=[\\\\<!\\[_*`]| {2,}\\n|$)"));
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final String value = matcher.group();
-        return Optional.of(new Text(value));
+        final Text text = new Text(value);
+        text.setPatent(parent);
+        parent.addChild(text);
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null && !(parent instanceof BlockQuote);
     }
 }

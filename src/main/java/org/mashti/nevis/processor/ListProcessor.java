@@ -16,11 +16,11 @@
  */
 package org.mashti.nevis.processor;
 
-import org.apache.commons.lang.StringUtils;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.List;
 import org.mashti.nevis.element.ListItem;
 import org.mashti.nevis.element.Node;
+import org.mashti.nevis.element.Paragraph;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -60,43 +60,69 @@ public class ListProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final boolean ordered = matcher.group(2).length() > 1;
         final String items = matcher.group();
         final List list = new List(ordered);
-
+        list.setPatent(parent);
         processItems(list, items, parser);
-        return Optional.of(list);
+        parent.addChild(list);
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return !(parent instanceof Paragraph);
     }
 
     private void processItems(List parent, String items, Parser parser) {
 
-        final Pattern p = Pattern.compile("^( *)((?:[*+-]|\\d+\\.)) [^\\n]*(?:\\n(?!\\1(?:[*+-]|\\d+\\.) )[^\\n]*)*", Pattern.MULTILINE);
+        final Pattern p = Pattern.compile("^( *)(?:[*+-]|\\d+\\.) (.*\\n*)((?!\\1(?:[*+-]|\\d+\\.) )(.*\\n*))*", Pattern.MULTILINE);
         final Matcher matcher = p.matcher(items);
 
         final Pattern remove_bullets = Pattern.compile("^ *([*+-]|\\d+\\.) +");
+        final Pattern spaces = Pattern.compile("^ {1,4}", Pattern.MULTILINE);
+
+        
+        boolean loose = Pattern.compile("\\n\\n(?!\\s*$)").matcher(items).find();
+        
         while (matcher.find()) {
 
             String item = matcher.group();
             item = remove_bullets.matcher(item).replaceAll("");
-            System.out.println(item);
+            item = spaces.matcher(item).replaceAll("").trim();
 
+            
+            
             final ListItem list_item = new ListItem();
-            parser.parseBlock(list_item, item);
+            list_item.setPatent(parent);
             
-            
+            if(loose){
+                final Paragraph paragraph = new Paragraph();
+
+                paragraph.setPatent(list_item);
+                parser.parse(paragraph, item);
+                
+                list_item.addChild(paragraph);
+                
+            }else {
+
+                parser.parse(list_item, item);
+            }
+
+
 //            String leadingLine = matcher.group(1);
 //            String split_item = matcher.group(4);
 //            split_item = Pattern.compile("^[ ]{4,}", Pattern.MULTILINE).matcher(split_item).replaceAll("");
 //
 //            if (!(leadingLine == null || leadingLine.isEmpty()) || split_item.contains("\n\n")) {
-//                parser.parseBlock(list_item, split_item);
+//                parser.parse(list_item, split_item);
 //            } else {
 //                parser.parseInline(list_item, split_item.trim());
 //            }
-            
+
             parent.addChild(list_item);
         }
+        
     }
 }

@@ -36,9 +36,15 @@ public class NewLineProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
-        final Text text = new Text(" ");
-        return Optional.of(text);
+        final Text text = new Text("\n");
+        text.setPatent(parent);
+        parent.addChild(text);
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null;
     }
 }

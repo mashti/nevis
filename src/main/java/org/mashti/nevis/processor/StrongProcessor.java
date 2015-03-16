@@ -35,14 +35,20 @@ public class StrongProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         String value = matcher.group(2);
-        if(value == null){
+        if (value == null) {
             value = matcher.group(1);
         }
         final Bold bold = new Bold();
-        parser.parseInline(bold, value);
-        return Optional.of(bold);
+        bold.setPatent(parent);
+        parser.parse(bold, value);
+        parent.addChild(bold);
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null;
     }
 }

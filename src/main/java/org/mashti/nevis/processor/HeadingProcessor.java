@@ -36,14 +36,14 @@ public class HeadingProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final int level = matcher.group(1).length();
         final String content = matcher.group(2);
         final Heading heading = new Heading(level);
-
+        heading.setPatent(parent);
         heading.addChild(new Text(content));
-        return Optional.of(heading);
+        parent.addChild(heading);
     }
 
 }

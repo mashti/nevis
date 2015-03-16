@@ -36,15 +36,15 @@ public class HeadingSetextProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final String level_group = matcher.group(2);
         final int level = level_group.startsWith("-") ? 2 : 1;
         final String content = matcher.group(1);
         final Heading heading = new Heading(level);
-
+        heading.setPatent(parent);
         heading.addChild(new Text(content));
-        return Optional.of(heading);
+        parent.addChild(heading);
     }
 
 }

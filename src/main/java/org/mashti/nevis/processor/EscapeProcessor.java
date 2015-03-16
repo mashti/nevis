@@ -35,11 +35,17 @@ public class EscapeProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final String value = matcher.group(1);
         final Escaped escaped = new Escaped();
-        parser.parseInline(escaped, value);
-        return Optional.of(escaped);
+        escaped.setPatent(parent);
+        parser.parse(escaped, value);
+        parent.addChild(escaped);
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null;
     }
 }

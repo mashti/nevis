@@ -19,8 +19,6 @@ package org.mashti.nevis;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.processor.*;
 
-import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -30,23 +28,19 @@ public class MarkdownParser implements Parser {
 
     static final Pattern NEW_LINE = Pattern.compile("(\\n\\r|\\r|\u2424)");
 
-    static final Processor[] BLOCK_PROCESSORS = {
+    static final Processor[] PROCESSORS = {
             new NewLineProcessor(),
             new CodeBlockProcessor(),
-            new ImageProcessor(),
-            new DefinitionProcessor(),
-            new BlockQuoteProcessor(),
-            new HtmlTagProcessor(),
             new HeadingProcessor(),
             new HeadingSetextProcessor(),
             new HorizontalRuleProcessor(),
+            new BlockQuoteProcessor(),
             new ListProcessor(),
-            new ParagraphProcessor()
-    };
-
-    static final Processor[] INLINE_PROCESSORS = {
+            new HtmlTagProcessor(),
+            new InlineHtmlTagProcessor(),
+            new DefinitionProcessor(),
+            new ImageProcessor(),
             new EscapeProcessor(),
-            new HtmlInlineTagProcessor(),
             new ListProcessor(),
             new InlineCodeProcessor(),
             new AutoLinkProcessor(),
@@ -57,7 +51,8 @@ public class MarkdownParser implements Parser {
             new StrongProcessor(),
             new EmphasizedProcessor(),
             new BreakLineProcessor(),
-            new TextProcessor()
+            new TextProcessor(),
+            new ParagraphProcessor(),
     };
 
     private static final Pattern UNICODE_WHITESPACE = Pattern.compile("\u00a0", Pattern.MULTILINE);
@@ -75,7 +70,7 @@ public class MarkdownParser implements Parser {
 
         final Node root = new Node();
         sanitise();
-        parseBlock(root, markdown);
+        parse(root, markdown);
         return root;
     }
 
@@ -87,57 +82,16 @@ public class MarkdownParser implements Parser {
     }
 
     @Override
-    public void parseBlock(final Node parent, String value) {
+    public void parse(final Node parent, String value) {
 
         while (!value.isEmpty()) {
 
-            for (Processor processor : BLOCK_PROCESSORS) {
+            for (Processor processor : PROCESSORS) {
 
-                final Pattern pattern = processor.pattern();
-                final Matcher matcher = pattern.matcher(value);
+                final String new_value = processor.process(parent, value, this);
 
-
-                if (matcher.find()) {
-
-                    if (matcher.start() != 0) {
-                        throw new RuntimeException("block processor " + processor);
-                    }
-
-                    value = value.substring(matcher.end());
-
-                    final Optional<Node> child = processor.process(matcher, this);
-                    if (child.isPresent()) {
-                        parent.addChild(child.get());
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void parseInline(final Node parent, String value) {
-
-        while (!value.isEmpty()) {
-
-            for (Processor processor : INLINE_PROCESSORS) {
-
-                final Pattern pattern = processor.pattern();
-                final Matcher matcher = pattern.matcher(value);
-
-
-                if (matcher.find()) {
-
-                    if (matcher.start() != 0) {
-                        throw new RuntimeException("inline processor " + processor);
-                    }
-
-                    value = value.substring(matcher.end());
-
-                    final Optional<Node> child = processor.process(matcher, this);
-                    if (child.isPresent()) {
-                        parent.addChild(child.get());
-                    }
+                if (!value.equals(new_value)) {
+                    value = new_value;
                     break;
                 }
             }

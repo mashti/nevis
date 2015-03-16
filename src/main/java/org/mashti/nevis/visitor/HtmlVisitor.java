@@ -107,14 +107,14 @@ public class HtmlVisitor implements Visitor {
         }
 
         html.append("<img src=\"");
-        html.append(source);
+        html.append(Utils.escapeHtmlAttribute(source));
         html.append("\" alt=\"");
-        html.append(image.getAlt());
+        html.append(Utils.escapeHtmlAttribute(image.getAlt()));
         html.append('"');
 
         if (image.getTitle() != null) {
             html.append(" title=\"");
-            html.append(image.getTitle());
+            html.append(Utils.escapeHtmlAttribute(image.getTitle()));
             html.append('"');
         }
         if (image.getId() != null) {
@@ -171,10 +171,10 @@ public class HtmlVisitor implements Visitor {
         }
     }
 
-    public void visit(HorizontalRule codeBlock) {
+    public void visit(HorizontalRule hr) {
 
         html.append("<hr />\n\n");
-        visit((Node) codeBlock);
+        visit((Node) hr);
     }
 
     public void visit(Code code) {
@@ -214,7 +214,7 @@ public class HtmlVisitor implements Visitor {
         }
 
         html.append("<a href=\"");
-        html.append(Utils.escapeHtml(destination));
+        html.append(Utils.escapeHtmlAttribute(destination));
         html.append('"');
         //        if (id != null && !id.trim().isEmpty()) {
         //            html.append(" id=\"");
@@ -223,7 +223,7 @@ public class HtmlVisitor implements Visitor {
         //        }
         if (link.getTitle() != null) {
             html.append(" title=\"");
-            html.append(Utils.escapeHtml(link.getTitle()));
+            html.append(Utils.escapeHtmlAttribute(link.getTitle()));
             html.append('"');
         }
         html.append('>');

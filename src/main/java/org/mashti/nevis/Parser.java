@@ -26,7 +26,7 @@ public interface Parser {
 
     Node parse();
 
-    void parseBlock(Node parent, String value);
+    void parse(Node parent, String value);
 
-    void parseInline(Node parent, String value);
+//    void parseInline(Node parent, String value);
 }

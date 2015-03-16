@@ -38,13 +38,14 @@ public class CodeBlockProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final String group = matcher.group();
         final String value = Utils.replaceAllPerLine(TABS, group, "");
 
         final CodeBlock code = new CodeBlock();
-        code.addChild(new Text(Utils.removeStartAndEndNewLines(value)));
-        return Optional.of(code);
+        code.setPatent(parent);
+        code.addChild(new Text(Utils.removeStartAndEndNewLines(value).replaceAll("&", "&amp;")));
+        parent.addChild(code);
     }
 }

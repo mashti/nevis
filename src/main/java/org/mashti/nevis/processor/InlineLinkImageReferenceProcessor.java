@@ -19,7 +19,6 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Image;
 import org.mashti.nevis.element.Link;
-import org.mashti.nevis.element.LinkDefinition;
 import org.mashti.nevis.element.Node;
 
 import java.util.Optional;
@@ -37,7 +36,7 @@ public class InlineLinkImageReferenceProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         String id = matcher.group(1);
         if (id == null) {
@@ -49,20 +48,25 @@ public class InlineLinkImageReferenceProcessor extends Processor {
         if (match.startsWith("!")) {
 
             final Image image = new Image(null);
+            image.setPatent(parent);
             image.setMatch(match);
             id = id.replaceAll(" *\\n", " ");
             image.setId(id);
 
-            parser.parseInline(image, id);
-
-            return Optional.of(image);
+            parser.parse(image, id);
+            parent.addChild(image);
         } else {
             final Link link = new Link(null);
+            link.setPatent(parent);
             link.setMatch(match);
-            parser.parseInline(link, id);
+            parser.parse(link, id);
             link.setId(id.replaceAll(" *\\n", " "));
-
-            return Optional.of(link);
+            parent.addChild(link);
         }
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null;
     }
 }

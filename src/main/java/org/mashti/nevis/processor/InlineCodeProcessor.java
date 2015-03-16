@@ -25,7 +25,9 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class InlineCodeProcessor extends Processor {
 
     public InlineCodeProcessor() {
@@ -34,14 +36,20 @@ public class InlineCodeProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         String value = matcher.group(2);
         final Code code = new Code();
-
+        code.setPatent(parent);
+        value = Pattern.compile("&").matcher(value).replaceAll("&amp;");
         value = Pattern.compile("<").matcher(value).replaceAll("&lt;");
         value = Pattern.compile(">").matcher(value).replaceAll("&gt;");
-        code.addChild(new Text(value));
-        return Optional.of(code);
+        code.addChild(new Text(value.trim()));
+        parent.addChild(code);
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null;
     }
 }

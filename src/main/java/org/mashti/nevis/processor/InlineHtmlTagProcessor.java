@@ -27,9 +27,9 @@ import java.util.regex.Pattern;
 /**
  * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
  */
-public class HtmlInlineTagProcessor extends Processor {
+public class InlineHtmlTagProcessor extends Processor {
 
-    public HtmlInlineTagProcessor() {
+    public InlineHtmlTagProcessor() {
 
         super(Pattern.compile("^(" +
                 "" +
@@ -42,12 +42,18 @@ public class HtmlInlineTagProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final String content = matcher.group();
         final String value = Utils.removeStartAndEndNewLines(content);
         final Html html = new Html(value);
+        html.setPatent(parent);
         html.setInline(true);
-        return Optional.of(html);
+        parent.addChild(html);
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null;
     }
 }

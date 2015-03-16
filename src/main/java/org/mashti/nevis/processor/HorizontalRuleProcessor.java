@@ -35,8 +35,10 @@ public class HorizontalRuleProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
-        return Optional.of(new HorizontalRule());
+        final HorizontalRule child = new HorizontalRule();
+        child.setPatent(parent);
+        parent.addChild(child);
     }
 }

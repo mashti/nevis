@@ -19,6 +19,7 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Link;
 import org.mashti.nevis.element.Node;
+import org.mashti.nevis.element.Paragraph;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -35,12 +36,17 @@ public class AutoLinkProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final String destination = matcher.group(1);
         final Link link = new Link(Utils.isEmail(destination) ? "mailto:" + destination : destination);
-        parser.parseInline(link, destination);
+        link.setPatent(parent);
+        parser.parse(link, destination);
+        parent.addChild(link);
+    }
 
-        return Optional.of(link);
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null;
     }
 }

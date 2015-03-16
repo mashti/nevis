@@ -39,5 +39,30 @@ public abstract class Processor {
         return pattern;
     }
 
-    public abstract Optional<Node> process(Matcher matcher, Parser parser);
+    public abstract void process(Node parent, Matcher matcher, Parser parser);
+
+    protected boolean matchesParent(Node parent) {
+        return true;
+    }
+
+    public String process(Node parent, String value, Parser parser) {
+
+        if (!matchesParent(parent)) {
+            return value;
+        }
+
+        final Matcher matcher = pattern.matcher(value);
+
+        if (matcher.find()) {
+
+            if (matcher.start() != 0) {
+                throw new RuntimeException("processor " + this);
+            }
+
+            process(parent, matcher, parser);
+            return value.substring(matcher.end());
+        } else {
+            return value;
+        }
+    }
 }

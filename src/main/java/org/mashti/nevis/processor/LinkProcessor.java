@@ -37,19 +37,25 @@ public class LinkProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         String id = matcher.group(2);
         final String match = matcher.group();
         final String text = matcher.group(1);
 
         final Link link = new Link(null);
+        link.setPatent(parent);
         if (id == null || id.trim().isEmpty()) {
             id = NEW_LINE_IN_TEXT.matcher(text).replaceAll(" ");
         }
         link.setMatch(match);
         link.setId(id);
-        parser.parseInline(link, text);
-        return Optional.of(link);
+        parser.parse(link, text);
+        parent.addChild(link);
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null;
     }
 }

@@ -24,7 +24,9 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk) */
+/**
+ * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
+ */
 public class BreakLineProcessor extends Processor {
 
     public BreakLineProcessor() {
@@ -33,8 +35,10 @@ public class BreakLineProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
-        return Optional.of(new BreakLine());
+        final BreakLine breakLine = new BreakLine();
+        breakLine.setPatent(parent);
+        parent.addChild(breakLine);
     }
 }

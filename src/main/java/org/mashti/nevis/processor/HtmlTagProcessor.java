@@ -56,10 +56,17 @@ public class HtmlTagProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final String content = matcher.group();
-        return Optional.of(new Html(Utils.removeStartAndEndNewLines(content)));
+        final Html child = new Html(Utils.removeStartAndEndNewLines(content));
+        child.setPatent(parent);
+        parent.addChild(child);
 
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() == null;
     }
 }

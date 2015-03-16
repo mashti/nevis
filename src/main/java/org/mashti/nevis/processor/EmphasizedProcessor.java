@@ -35,7 +35,7 @@ public class EmphasizedProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         String value = matcher.group(2);
         if(value == null){
@@ -43,7 +43,13 @@ public class EmphasizedProcessor extends Processor {
             value = matcher.group(1);
         }
         final Emphasized emphasized = new Emphasized();
-        parser.parseInline(emphasized, value);
-        return Optional.of(emphasized);
+        emphasized.setPatent(parent);
+        parser.parse(emphasized, value);
+        parent.addChild(emphasized);
+    }
+
+    @Override
+    protected boolean matchesParent(Node parent) {
+        return parent.getPatent() != null;
     }
 }

@@ -37,15 +37,15 @@ public class DefinitionProcessor extends Processor {
     }
 
     @Override
-    public Optional<Node> process(final Matcher matcher, Parser parser) {
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final String id = matcher.group(1).toLowerCase();
         final String destination = matcher.group(2);
         final String title = matcher.group(3);
         final LinkDefinition link = new LinkDefinition(destination);
+        link.setPatent(parent);
         link.setId(id);
         link.setTitle(title);
-
-        return Optional.of(link);
+        parent.addChild(link);
     }
 }

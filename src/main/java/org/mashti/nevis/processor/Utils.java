@@ -49,7 +49,12 @@ public final class Utils {
 
     public static String escapeHtml(String value) {
 
-        return StringEscapeUtils.escapeHtml(StringEscapeUtils.unescapeHtml(value));
+        return value.replaceAll("&(?![^&]*;)", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");//  StringEscapeUtils.escapeHtml(value);
+    }
+
+    public static String escapeHtmlAttribute(String value) {
+
+        return value.replaceAll("\"", "&quot;").replaceAll("&(?![^&]*;)", "&amp;");
     }
 
     static boolean isEmail(String destination) {

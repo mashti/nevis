@@ -17,14 +17,13 @@
 
 package org.mashti.nevis.processor;
 
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Image;
 import org.mashti.nevis.element.Link;
 import org.mashti.nevis.element.Node;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
@@ -47,13 +46,13 @@ public class InlineLinkImageProcessor extends Processor {
 
         if (isImage) {
             final Image image = new Image(source);
-            image.setPatent(parent);
+            image.setParent(parent);
             image.setAlt(alt);
             image.setTitle(title);
             parent.addChild(image);
         } else {
             final Link link = new Link(source);
-            link.setPatent(parent);
+            link.setParent(parent);
             link.setTitle(title);
             parser.parse(link, alt);
             parent.addChild(link);
@@ -61,7 +60,7 @@ public class InlineLinkImageProcessor extends Processor {
     }
 
     @Override
-    protected boolean matchesParent(Node parent) {
-        return parent.getPatent() != null;
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() != null;
     }
 }

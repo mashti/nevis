@@ -20,7 +20,6 @@ import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Emphasized;
 import org.mashti.nevis.element.Node;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,13 +42,13 @@ public class EmphasizedProcessor extends Processor {
             value = matcher.group(1);
         }
         final Emphasized emphasized = new Emphasized();
-        emphasized.setPatent(parent);
+        emphasized.setParent(parent);
         parser.parse(emphasized, value);
         parent.addChild(emphasized);
     }
 
     @Override
-    protected boolean matchesParent(Node parent) {
-        return parent.getPatent() != null;
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() != null;
     }
 }

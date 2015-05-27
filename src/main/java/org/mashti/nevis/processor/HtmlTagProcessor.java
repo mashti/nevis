@@ -20,7 +20,6 @@ import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Html;
 import org.mashti.nevis.element.Node;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,13 +59,13 @@ public class HtmlTagProcessor extends Processor {
 
         final String content = matcher.group();
         final Html child = new Html(Utils.removeStartAndEndNewLines(content));
-        child.setPatent(parent);
+        child.setParent(parent);
         parent.addChild(child);
 
     }
 
     @Override
-    protected boolean matchesParent(Node parent) {
-        return parent.getPatent() == null;
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() == null;
     }
 }

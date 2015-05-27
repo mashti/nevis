@@ -1,16 +1,16 @@
 /**
  * This file is part of nevis.
- *
+ * <p>
  * nevis is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * nevis is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with nevis.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -87,13 +87,13 @@ public class MarkdownParserTest {
     @Before
     public void setUp() throws Exception {
 
-        parser = new MarkdownParser(FileUtils.readFileToString(md_file));
+        parser = new MarkdownParser();
     }
 
     @Test
     public void testParse() throws Exception {
 
-        final Node node = parser.parse();
+        final Node node = parser.parse(FileUtils.readFileToString(md_file));
         final Visitor htmlVisitor = new HtmlVisitor();
 
         htmlVisitor.visit(node);

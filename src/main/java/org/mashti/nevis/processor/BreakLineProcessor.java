@@ -20,7 +20,6 @@ import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.BreakLine;
 import org.mashti.nevis.element.Node;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +37,7 @@ public class BreakLineProcessor extends Processor {
     public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final BreakLine breakLine = new BreakLine();
-        breakLine.setPatent(parent);
+        breakLine.setParent(parent);
         parent.addChild(breakLine);
     }
 }

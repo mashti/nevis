@@ -17,11 +17,9 @@
 package org.mashti.nevis.processor;
 
 import org.mashti.nevis.Parser;
-import org.mashti.nevis.element.Link;
 import org.mashti.nevis.element.LinkDefinition;
 import org.mashti.nevis.element.Node;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +41,7 @@ public class DefinitionProcessor extends Processor {
         final String destination = matcher.group(2);
         final String title = matcher.group(3);
         final LinkDefinition link = new LinkDefinition(destination);
-        link.setPatent(parent);
+        link.setParent(parent);
         link.setId(id);
         link.setTitle(title);
         parent.addChild(link);

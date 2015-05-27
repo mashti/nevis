@@ -20,7 +20,6 @@ import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Escaped;
 import org.mashti.nevis.element.Node;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,13 +38,13 @@ public class EscapeProcessor extends Processor {
 
         final String value = matcher.group(1);
         final Escaped escaped = new Escaped();
-        escaped.setPatent(parent);
+        escaped.setParent(parent);
         parser.parse(escaped, value);
         parent.addChild(escaped);
     }
 
     @Override
-    protected boolean matchesParent(Node parent) {
-        return parent.getPatent() != null;
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() != null;
     }
 }

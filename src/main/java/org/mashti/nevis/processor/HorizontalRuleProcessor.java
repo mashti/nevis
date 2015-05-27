@@ -20,7 +20,6 @@ import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.HorizontalRule;
 import org.mashti.nevis.element.Node;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +37,7 @@ public class HorizontalRuleProcessor extends Processor {
     public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final HorizontalRule child = new HorizontalRule();
-        child.setPatent(parent);
+        child.setParent(parent);
         parent.addChild(child);
     }
 }

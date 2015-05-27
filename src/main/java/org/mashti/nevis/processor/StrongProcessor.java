@@ -20,7 +20,6 @@ import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.Bold;
 import org.mashti.nevis.element.Node;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,14 +40,15 @@ public class StrongProcessor extends Processor {
         if (value == null) {
             value = matcher.group(1);
         }
+        
         final Bold bold = new Bold();
-        bold.setPatent(parent);
+        bold.setParent(parent);
         parser.parse(bold, value);
         parent.addChild(bold);
     }
 
     @Override
-    protected boolean matchesParent(Node parent) {
-        return parent.getPatent() != null;
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() != null;
     }
 }

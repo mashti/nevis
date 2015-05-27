@@ -17,11 +17,9 @@
 package org.mashti.nevis.processor;
 
 import org.mashti.nevis.Parser;
-import org.mashti.nevis.element.Emphasized;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Text;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,12 +37,12 @@ public class NewLineProcessor extends Processor {
     public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         final Text text = new Text("\n");
-        text.setPatent(parent);
+        text.setParent(parent);
         parent.addChild(text);
     }
 
     @Override
-    protected boolean matchesParent(Node parent) {
-        return parent.getPatent() != null;
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() != null;
     }
 }

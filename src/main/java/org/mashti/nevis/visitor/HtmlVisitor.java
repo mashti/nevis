@@ -18,7 +18,11 @@ package org.mashti.nevis.visitor;
 
 import org.mashti.nevis.element.*;
 import org.mashti.nevis.processor.Utils;
+import org.w3c.tidy.Tidy;
 
+import java.io.SequenceInputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.HashMap;
 
 /**
@@ -167,7 +171,7 @@ public class HtmlVisitor implements Visitor {
 
         if (!codeBlock.isInline()) {
             html.append("\n\n");
-            
+
         }
     }
 
@@ -216,11 +220,6 @@ public class HtmlVisitor implements Visitor {
         html.append("<a href=\"");
         html.append(Utils.escapeHtmlAttribute(destination));
         html.append('"');
-        //        if (id != null && !id.trim().isEmpty()) {
-        //            html.append(" id=\"");
-        //            html.append(id);
-        //            html.append("\"");
-        //        }
         if (link.getTitle() != null) {
             html.append(" title=\"");
             html.append(Utils.escapeHtmlAttribute(link.getTitle()));
@@ -245,8 +244,8 @@ public class HtmlVisitor implements Visitor {
 
     public void visit(List emphasized) {
 
-        final String list_type = emphasized.isOrdered() ? "ol" : "ul";
-        html.append("<").append(list_type).append(">\n");
+        final String list_type = (emphasized.isOrdered() ? "o" : "u") + 'l';
+        html.append('<').append(list_type).append(">\n");
         visit((Node) emphasized);
         html.append("</").append(list_type).append(">\n");
     }

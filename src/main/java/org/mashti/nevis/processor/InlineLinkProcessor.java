@@ -21,7 +21,6 @@ import org.mashti.nevis.element.Image;
 import org.mashti.nevis.element.Link;
 import org.mashti.nevis.element.Node;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,14 +52,14 @@ public class InlineLinkProcessor extends Processor {
         if (match.startsWith("!")) {
 
             final Image image = new Image(null);
-            image.setPatent(parent);
+            image.setParent(parent);
             image.setMatch(match);
             image.setId(id);
             parser.parse(image, id);
             parent.addChild(image);
         } else {
             final Link link = new Link(null);
-            link.setPatent(parent);
+            link.setParent(parent);
             link.setMatch(match);
             link.setId(id);
             parser.parse(link, text);
@@ -69,7 +68,7 @@ public class InlineLinkProcessor extends Processor {
     }
 
     @Override
-    protected boolean matchesParent(Node parent) {
-        return parent.getPatent() != null;
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() != null;
     }
 }

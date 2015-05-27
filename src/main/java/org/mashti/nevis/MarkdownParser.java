@@ -1,16 +1,16 @@
 /**
  * This file is part of nevis.
- *
+ * <p>
  * nevis is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * nevis is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with nevis.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 /**
  * @author Masih Hajiarabderkani (mh638@st-andrews.ac.uk)
  */
-public class MarkdownParser implements Parser {
+public class MarkdownParser extends Parser {
 
     static final Pattern NEW_LINE = Pattern.compile("(\\n\\r|\\r|\u2424)");
 
@@ -39,7 +39,6 @@ public class MarkdownParser implements Parser {
             new HtmlTagProcessor(),
             new InlineHtmlTagProcessor(),
             new DefinitionProcessor(),
-            new ImageProcessor(),
             new EscapeProcessor(),
             new ListProcessor(),
             new InlineCodeProcessor(),
@@ -47,7 +46,6 @@ public class MarkdownParser implements Parser {
             new InlineLinkImageProcessor(),
             new InlineLinkProcessor(),
             new InlineLinkImageReferenceProcessor(),
-            new LinkProcessor(),
             new StrongProcessor(),
             new EmphasizedProcessor(),
             new BreakLineProcessor(),
@@ -57,44 +55,26 @@ public class MarkdownParser implements Parser {
 
     private static final Pattern UNICODE_WHITESPACE = Pattern.compile("\u00a0", Pattern.MULTILINE);
     private static final Pattern TAB = Pattern.compile("\\t");
+    public static final Pattern SPACE_LINE = Pattern.compile("^ *$", Pattern.MULTILINE);
 
-
-    private String markdown;
-
-    public MarkdownParser(String markdown) {
-        this.markdown = markdown;
+    public MarkdownParser() {
+        super(PROCESSORS);
     }
 
     @Override
-    public Node parse() {
+    public Node parse(String value) {
 
-        final Node root = new Node();
-        sanitise();
-        parse(root, markdown);
-        return root;
+        final String sanitised_value = sanitise(value);
+        return super.parse(sanitised_value);
     }
 
-    private void sanitise() {
-        markdown = NEW_LINE.matcher(markdown).replaceAll("\n");
-        markdown = UNICODE_WHITESPACE.matcher(markdown).replaceAll(" ");
-        markdown = TAB.matcher(markdown).replaceAll("    ");
-        markdown = Pattern.compile("^ *$", Pattern.MULTILINE).matcher(markdown).replaceAll("");
-    }
+    private String sanitise(String value) {
 
-    @Override
-    public void parse(final Node parent, String value) {
+        value = NEW_LINE.matcher(value).replaceAll("\n");
+        value = UNICODE_WHITESPACE.matcher(value).replaceAll(" ");
+        value = TAB.matcher(value).replaceAll("    ");
+        value = SPACE_LINE.matcher(value).replaceAll("");
 
-        while (!value.isEmpty()) {
-
-            for (Processor processor : PROCESSORS) {
-
-                final String new_value = processor.process(parent, value, this);
-
-                if (!value.equals(new_value)) {
-                    value = new_value;
-                    break;
-                }
-            }
-        }
+        return value;
     }
 }

@@ -30,7 +30,7 @@ public class Node {
 
     private java.util.List<Node> children;
     private Map<String, String> attributes;
-    private Node patent;
+    private Node parent;
 
     public Node() {
 
@@ -64,11 +64,11 @@ public class Node {
         visitor.visit(this);
     }
 
-    public void setPatent(Node patent) {
-        this.patent = patent;
+    public void setParent(Node parent) {
+        this.parent = parent;
     }
 
-    public Node getPatent() {
-        return patent;
+    public Node getParent() {
+        return parent;
     }
 }

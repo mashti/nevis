@@ -21,7 +21,6 @@ import org.mashti.nevis.element.BlockQuote;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Text;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,12 +40,12 @@ public class TextProcessor extends Processor {
 
         final String value = matcher.group();
         final Text text = new Text(value);
-        text.setPatent(parent);
+        text.setParent(parent);
         parent.addChild(text);
     }
 
     @Override
-    protected boolean matchesParent(Node parent) {
-        return parent.getPatent() != null && !(parent instanceof BlockQuote);
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() != null && !(parent instanceof BlockQuote);
     }
 }

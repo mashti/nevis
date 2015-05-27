@@ -21,7 +21,6 @@ import org.mashti.nevis.element.Heading;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Text;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +40,7 @@ public class HeadingProcessor extends Processor {
         final int level = matcher.group(1).length();
         final String content = matcher.group(2);
         final Heading heading = new Heading(level);
-        heading.setPatent(parent);
+        heading.setParent(parent);
         heading.addChild(new Text(content));
         parent.addChild(heading);
     }

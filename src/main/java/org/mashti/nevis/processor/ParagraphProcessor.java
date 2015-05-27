@@ -22,7 +22,6 @@ import org.mashti.nevis.element.ListItem;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Paragraph;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +40,7 @@ public class ParagraphProcessor extends Processor {
 
         final String content = matcher.group();
         final Paragraph paragraph = new Paragraph();
-        paragraph.setPatent(parent);
+        paragraph.setParent(parent);
         if (!content.trim().isEmpty()) {
             parser.parse(paragraph, Utils.removeStartAndEndNewLines(content));
         }
@@ -50,7 +49,7 @@ public class ParagraphProcessor extends Processor {
     }
 
     @Override
-    protected boolean matchesParent(Node parent) {
-        return parent.getPatent() == null || parent instanceof ListItem || parent instanceof BlockQuote;
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() == null || parent instanceof ListItem || parent instanceof BlockQuote;
     }
 }

@@ -21,7 +21,6 @@ import org.mashti.nevis.element.CodeBlock;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Text;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,12 +38,12 @@ public class CodeBlockProcessor extends Processor {
 
     @Override
     public void process(final Node parent, final Matcher matcher, Parser parser) {
-
+        
         final String group = matcher.group();
         final String value = Utils.replaceAllPerLine(TABS, group, "");
 
         final CodeBlock code = new CodeBlock();
-        code.setPatent(parent);
+        code.setParent(parent);
         code.addChild(new Text(Utils.removeStartAndEndNewLines(value).replaceAll("&", "&amp;")));
         parent.addChild(code);
     }

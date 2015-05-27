@@ -19,9 +19,7 @@ package org.mashti.nevis.processor;
 import org.mashti.nevis.Parser;
 import org.mashti.nevis.element.BlockQuote;
 import org.mashti.nevis.element.Node;
-import org.mashti.nevis.element.Paragraph;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,7 +40,7 @@ public class BlockQuoteProcessor extends Processor {
         content = Pattern.compile("^ *> ?", Pattern.MULTILINE).matcher(content).replaceAll("");
 
         final BlockQuote block_quote = new BlockQuote();
-        block_quote.setPatent(parent);
+        block_quote.setParent(parent);
         parent.addChild(block_quote);
         if (!content.trim().isEmpty()) {
             parser.parse(block_quote, content);

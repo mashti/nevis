@@ -21,7 +21,6 @@ import org.mashti.nevis.element.Code;
 import org.mashti.nevis.element.Node;
 import org.mashti.nevis.element.Text;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +39,7 @@ public class InlineCodeProcessor extends Processor {
 
         String value = matcher.group(2);
         final Code code = new Code();
-        code.setPatent(parent);
+        code.setParent(parent);
         value = Pattern.compile("&").matcher(value).replaceAll("&amp;");
         value = Pattern.compile("<").matcher(value).replaceAll("&lt;");
         value = Pattern.compile(">").matcher(value).replaceAll("&gt;");
@@ -49,7 +48,7 @@ public class InlineCodeProcessor extends Processor {
     }
 
     @Override
-    protected boolean matchesParent(Node parent) {
-        return parent.getPatent() != null;
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() != null;
     }
 }

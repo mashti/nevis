@@ -29,6 +29,6 @@ package org.derkani.nevis.element;
 /**
  * @author Masih Hajiarab Derkani
  */
-public class BlockQuote extends Node {
+public class Blockquote extends Node {
 
 }

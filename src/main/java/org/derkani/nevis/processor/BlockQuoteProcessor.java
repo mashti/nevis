@@ -27,8 +27,9 @@
 package org.derkani.nevis.processor;
 
 import org.derkani.nevis.Parser;
-import org.derkani.nevis.element.BlockQuote;
+import org.derkani.nevis.element.Blockquote;
 import org.derkani.nevis.element.Node;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,11 +37,23 @@ import java.util.regex.Pattern;
 /**
  * @author Masih Hajiarab Derkani
  */
-public class BlockQuoteProcessor extends Processor {
+public class BlockquoteProcessor extends Processor {
 
-    public BlockQuoteProcessor() {
+    public BlockquoteProcessor() {
 
-        super(Pattern.compile("^( *>[^\\n]+(\\n(?! *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$))[^\\n]+)*\\n*)+"));
+//        super(Pattern.compile("^( *>[^\\n]+(\\n(?! *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$))[^\\n]+)*\\n*)+"));
+
+        super(VerbalExpression.regex()
+                              .searchOneLine(true)
+                              .startOfLine()
+                              .lineBreak().zeroOrMore()
+                              .capture()
+                              .then(" ").count(0,3)
+                              .then(">").anything().lineBreak()
+                              .endCapture().oneOrMore()
+                              .lineBreak().zeroOrMore()
+                              .build());
+        
     }
 
     @Override
@@ -49,12 +62,11 @@ public class BlockQuoteProcessor extends Processor {
         String content = matcher.group();
         content = Pattern.compile("^ *> ?", Pattern.MULTILINE).matcher(content).replaceAll("");
 
-        final BlockQuote block_quote = new BlockQuote();
+        final Blockquote block_quote = new Blockquote();
         block_quote.setParent(parent);
         parent.addChild(block_quote);
         if (!content.trim().isEmpty()) {
             parser.parse(block_quote, content);
         }
     }
-
 }

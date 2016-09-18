@@ -30,6 +30,7 @@ import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.Heading;
 import org.derkani.nevis.element.Node;
 import org.derkani.nevis.element.Text;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,7 +42,21 @@ public class HeadingProcessor extends Processor {
 
     public HeadingProcessor() {
 
-        super(Pattern.compile("^ *(#{1,6}) *([^\\n]+?) *\\1? *(?:\\n+|$)"));
+//        super(Pattern.compile("^ *(#{1,6}) *([^\\n]+?) *\\1? *(?:\\n+|$)"));
+        super(VerbalExpression.regex()
+                              .searchOneLine(true)
+                              .startOfLine()
+                              .lineBreak().zeroOrMore()
+                              .then(" ").count(0, 3)
+                              .capture().then("#").count(1, 6).endCapture()
+                              .then(" ").zeroOrMore()
+//                              .capture().add("[^\\n]+?").endCapture()
+                              .capture().add(".+?").endCapture()
+                              .then(" ").zeroOrMore()
+                              .add("\\1?")
+                              .then(" ").zeroOrMore()
+                              .lineBreak()
+                              .build());
     }
 
     @Override
@@ -51,7 +66,7 @@ public class HeadingProcessor extends Processor {
         final String content = matcher.group(2);
         final Heading heading = new Heading(level);
         heading.setParent(parent);
-        heading.addChild(new Text(content));
+        heading.addChild(new Text(content.trim()));
         parent.addChild(heading);
     }
 

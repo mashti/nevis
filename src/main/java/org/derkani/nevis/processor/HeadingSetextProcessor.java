@@ -30,6 +30,7 @@ import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.Heading;
 import org.derkani.nevis.element.Node;
 import org.derkani.nevis.element.Text;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,15 +42,30 @@ public class HeadingSetextProcessor extends Processor {
 
     public HeadingSetextProcessor() {
 
-        super(Pattern.compile("^([^\\n]+)\\n *(=|-){2,} *(?:\\n+|$)"));
+//        super(Pattern.compile("^([^\\n]+)\\n *(=|-){2,} *(?:\\n+|$)"));
+        super(VerbalExpression.regex()
+                        .searchOneLine(true)
+                        .startOfLine()
+                        .lineBreak().zeroOrMore()
+                        .capture()
+                        .something()
+                        .endCapture()
+                        .lineBreak()
+                        .then(" ").zeroOrMore()
+                        .capture()
+                        .anyOf("=-").atLeast(2)
+                        .endCapture()
+                        .then(" ").zeroOrMore()
+                        .lineBreak()
+                        .build());
     }
 
     @Override
     public void process(final Node parent, final Matcher matcher, Parser parser) {
 
+        final String content = matcher.group(1);
         final String level_group = matcher.group(2);
         final int level = level_group.startsWith("-") ? 2 : 1;
-        final String content = matcher.group(1);
         final Heading heading = new Heading(level);
         heading.setParent(parent);
         heading.addChild(new Text(content));

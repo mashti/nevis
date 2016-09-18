@@ -26,46 +26,25 @@
  */
 package org.derkani.nevis.processor;
 
-import org.derkani.nevis.Parser;
-import org.derkani.nevis.element.CodeBlock;
-import org.derkani.nevis.element.Node;
-import org.derkani.nevis.element.Text;
+import org.derkani.nevis.*;
+import org.derkani.nevis.element.*;
 import ru.lanwen.verbalregex.*;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 /**
  * @author Masih Hajiarab Derkani
  */
-public class CodeBlockProcessor extends Processor {
+public class WhitespaceProcessor extends Processor {
 
-    private static final Pattern TABS = Pattern.compile("^(\\s{4}|\\t)");
+    public WhitespaceProcessor() {
 
-    public CodeBlockProcessor() {
-
-//        super(Pattern.compile("^( {4}[^\\n]+\\n*)+"));
-        super(VerbalExpression.regex()
-                              .searchOneLine(true)
-                              .startOfLine()
-                              .lineBreak().zeroOrMore()
-                              .capture()
-                              .then(" ").count(4)
-                              .something()
-                              .lineBreak().zeroOrMore()
-                              .endCapture().oneOrMore()
-                              .build());
+        super(VerbalExpression.regex().space().zeroOrMore().build());
     }
 
     @Override
     public void process(final Node parent, final Matcher matcher, Parser parser) {
-        
-        final String group = matcher.group();
-        final String value = Utils.replaceAllPerLine(TABS, group, "");
 
-        final CodeBlock code = new CodeBlock();
-        code.setParent(parent);
-        code.addChild(new Text(Utils.removeStartAndEndNewLines(value).replaceAll("&", "&amp;")));
-        parent.addChild(code);
+        // do nothing
     }
 }

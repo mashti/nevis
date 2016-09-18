@@ -27,7 +27,7 @@
 package org.derkani.nevis.processor;
 
 import org.derkani.nevis.Parser;
-import org.derkani.nevis.element.BlockQuote;
+import org.derkani.nevis.element.Blockquote;
 import org.derkani.nevis.element.Node;
 import org.derkani.nevis.element.Text;
 
@@ -56,6 +56,6 @@ public class TextProcessor extends Processor {
 
     @Override
     protected boolean checkParent(Node parent) {
-        return parent.getParent() != null && !(parent instanceof BlockQuote);
+        return parent.getParent() != null && !(parent instanceof Blockquote);
     }
 }

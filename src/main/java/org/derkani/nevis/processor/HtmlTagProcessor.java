@@ -51,7 +51,7 @@ public class HtmlTagProcessor extends Processor {
             ").*?</\\1>";
     private static final String CLOSING = "<" + TAG +
             "(?:\"[^\"]*\"|'[^']*'|[^'\">])*?>";
-    public static final String PATTERN_1 = "^ *(?:" +
+    public static final String PATTERN_1 = "^\\n* *(?:" +
             COMMENT +
             "|" +
             CLOSED +

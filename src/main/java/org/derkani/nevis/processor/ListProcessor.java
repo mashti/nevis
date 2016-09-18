@@ -31,6 +31,7 @@ import org.derkani.nevis.element.List;
 import org.derkani.nevis.element.ListItem;
 import org.derkani.nevis.element.Node;
 import org.derkani.nevis.element.Paragraph;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,17 +41,50 @@ import java.util.regex.Pattern;
  */
 public class ListProcessor extends Processor {
 
-    private static final String BULLET = "(?:[*+-]|\\d+\\.)";
+    private static final String BULLET = "(?:[\\*+-]|(?:\\d+\\.))";
 
     public ListProcessor() {
 
-        super(Pattern.compile("^( *)(" + BULLET + ") [\\s\\S]+?(?:\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))|\\n+(?= *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$))|\\n{2,}(?! )(?!\\1" + BULLET + " )\\n*|\\s*$)"));
+//        super(Pattern.compile("
+// ^( *)(" + BULLET + ") [\\s\\S]+?
+// (?:\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))|
+// \\n+(?= *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$))|
+// \\n{2,}(?! )(?!\\1" + BULLET + " )\\n*|\\s*$)"));
+        super(VerbalExpression.regex()
+                        .searchOneLine(true)
+                        .startOfLine()
+                        .lineBreak().zeroOrMore()
+                        .capture()
+                            .capture()
+                              .then(" ").count(0, 3)
+                              .endCapture()
+                            .capture().add(BULLET).endCapture()
+//                        .capture().anyOf("*+-").endCapture()
+                            .anyOf(" \\t").oneOrMore()
+                            .capture()
+                              .something().lineBreak()
+//                              .anything().lineBreak()
+                        
+//                              .add("[\\s\\S]+?")
+                            .endCapture()//.oneOrMore()//.add("?")
+                        
+                        .endCapture().oneOrMore()//.add("?")
+                              .add( 
+                             "(?=" 
+//                                   + "\\2?" 
+//                                   + "([-\\*_] *){3,})" 
+//                             + "|(\\n{2,})" 
+//                             + "|" 
+                                   + "(.*\\n*)" 
+                             + ")")
+                              
+                        .build());
     }
 
     @Override
     public void process(final Node parent, final Matcher matcher, Parser parser) {
 
-        final boolean ordered = matcher.group(2).length() > 1;
+        final boolean ordered = matcher.group(3).length() > 1;
         final String items = matcher.group();
         final List list = new List(ordered);
         list.setParent(parent);

@@ -29,6 +29,7 @@ package org.derkani.nevis.processor;
 import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.Bold;
 import org.derkani.nevis.element.Node;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,17 +41,25 @@ public class StrongProcessor extends Processor {
 
     public StrongProcessor() {
 
-        super(Pattern.compile("^__([\\s\\S]+?)__(?!_)|^\\*\\*([\\s\\S]+?)\\*\\*(?!\\*)"));
+//        super(Pattern.compile("^__([\\s\\S]+?)__(?!_)|^\\*\\*([\\s\\S]+?)\\*\\*(?!\\*)"));
+        
+        super(VerbalExpression.regex()
+                        .searchOneLine(true)
+                        .startOfLine()
+                        .capture()
+                        .anyOf("_*").count(2)
+                        .endCapture()
+                        .capture()
+                        .something()
+                        .endCapture()
+                        .add("\\1")
+                        .build());
     }
 
     @Override
     public void process(final Node parent, final Matcher matcher, Parser parser) {
 
-        String value = matcher.group(2);
-        if (value == null) {
-            value = matcher.group(1);
-        }
-        
+        final String value = matcher.group(2);
         final Bold bold = new Bold();
         bold.setParent(parent);
         parser.parse(bold, value);

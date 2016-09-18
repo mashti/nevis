@@ -4,14 +4,14 @@
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the <organization> nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
+ * * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ * * Neither the name of the <organization> nor the
+ * names of its contributors may be used to endorse or promote products
+ * derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -28,6 +28,7 @@ package org.derkani.nevis.processor;
 
 import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.Node;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,18 +39,28 @@ import java.util.regex.Pattern;
 public abstract class Processor {
 
     private final Pattern pattern;
+//    private final VerbalExpression expression;
 
     protected Processor(final Pattern pattern) {
+
         this.pattern = pattern;
     }
 
+    protected Processor(final VerbalExpression expression) {
+
+        this(Pattern.compile(expression.toString()));
+        System.out.println(expression);
+    }
+
     public Pattern getPattern() {
+
         return pattern;
     }
 
     public abstract void process(Node parent, Matcher matcher, Parser parser);
 
     protected boolean checkParent(Node parent) {
+
         return true;
     }
 
@@ -59,7 +70,7 @@ public abstract class Processor {
 
             final Matcher matcher = pattern.matcher(value);
             if (matcher.find()) {
-                
+
                 checkMatcher(matcher);
 
                 process(parent, matcher, parser);
@@ -71,10 +82,9 @@ public abstract class Processor {
     }
 
     private void checkMatcher(Matcher matcher) {
+
         if (matcher.start() != 0) {
-            throw new RuntimeException("processor " + this);
+            throw new RuntimeException("processor " + this + matcher.group());
         }
     }
-
-
 }

@@ -30,6 +30,7 @@ import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.Image;
 import org.derkani.nevis.element.Link;
 import org.derkani.nevis.element.Node;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,17 +42,22 @@ public class InlineLinkImageReferenceProcessor extends Processor {
 
     public InlineLinkImageReferenceProcessor() {
 
-        super(Pattern.compile("^!?\\[((?:\\[[^\\]]*\\]|[^\\[\\]\\\\])*)\\]"));
+//        super(Pattern.compile("^!?\\[((?:\\[[^\\]]*\\]|[^\\[\\]\\\\])*)\\]"));
+        super(VerbalExpression.regex()
+                        .startOfLine()
+                        .searchOneLine(true)
+                        .maybe("!")
+                        .then("[")
+                        .capture()
+                        .somethingButNot("[]\\")
+                        .endCapture()
+                        .then("]").build());
     }
 
     @Override
     public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         String id = matcher.group(1);
-        if (id == null) {
-            id = matcher.group(2);
-        }
-
         final String match = matcher.group();
 
         if (match.startsWith("!")) {

@@ -29,6 +29,7 @@ package org.derkani.nevis.processor;
 import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.Node;
 import org.derkani.nevis.element.Text;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,7 +41,14 @@ public class NewLineProcessor extends Processor {
 
     public NewLineProcessor() {
 
-        super(Pattern.compile("^\\n+"));
+//        super(Pattern.compile("^\\n+"));
+        super(VerbalExpression.regex()
+                              .searchOneLine(true)
+                              .startOfLine()
+                              .lineBreak()
+                              .oneOrMore()
+                              .build()
+        );
     }
 
     @Override

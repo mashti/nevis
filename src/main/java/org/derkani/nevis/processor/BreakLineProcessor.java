@@ -29,6 +29,7 @@ package org.derkani.nevis.processor;
 import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.BreakLine;
 import org.derkani.nevis.element.Node;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,8 +40,15 @@ import java.util.regex.Pattern;
 public class BreakLineProcessor extends Processor {
 
     public BreakLineProcessor() {
-
-        super(Pattern.compile("^ {2,}\\n(?!\\s*$)"));
+        
+//        super(Pattern.compile("^ {2,}\\n(?!\\s*$)"));
+        super(VerbalExpression.regex()
+                        .searchOneLine(true)
+                        .startOfLine()
+                        .then(" ").atLeast(2)
+                        .lineBreak()
+                        .build()
+        );
     }
 
     @Override

@@ -29,6 +29,7 @@ package org.derkani.nevis.processor;
 import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.Escaped;
 import org.derkani.nevis.element.Node;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,7 +41,16 @@ public class EscapeProcessor extends Processor {
 
     public EscapeProcessor() {
 
-        super(Pattern.compile("^\\\\([\\\\`*{}\\[\\]\\(\\)#+\\-.!_>])"));
+//        super(Pattern.compile("^\\\\([\\\\`*{}\\[\\]\\(\\)#+\\-.!_>])"));
+
+        super(VerbalExpression.regex()
+                              .searchOneLine(true)
+                              .startOfLine()
+                              .then("\\")
+                              .capture()
+                              .anyOf("[]{}()`*\\#+-_.!<>")
+                              .endCapture()
+                              .build());
     }
 
     @Override

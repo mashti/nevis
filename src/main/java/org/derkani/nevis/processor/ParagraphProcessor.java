@@ -27,13 +27,13 @@
 package org.derkani.nevis.processor;
 
 import org.derkani.nevis.Parser;
-import org.derkani.nevis.element.BlockQuote;
+import org.derkani.nevis.element.Blockquote;
 import org.derkani.nevis.element.ListItem;
 import org.derkani.nevis.element.Node;
 import org.derkani.nevis.element.Paragraph;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Masih Hajiarab Derkani
@@ -42,7 +42,18 @@ public class ParagraphProcessor extends Processor {
 
     public ParagraphProcessor() {
 
-        super(Pattern.compile("^((?:[^\\n]+\\n?(?!( *[-*_]){3,} *(?:\\n+|$)| *(#{1,6}) *([^\\n]+?) *#* *(?:\\n+|$)|([^\\n]+)\\n *(=|-){2,} *(?:\\n+|$)|( *>[^\\n]+(\\n(?! *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$))[^\\n]+)*\\n*)+|<(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|[^\\w\\s@]*@)\\b| *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$)))+)\\n*"));
+//        super(Pattern.compile("^((?:[^\\n]+\\n?(?!( *[-*_]){3,} *(?:\\n+|$)| *(#{1,6}) *([^\\n]+?) *#* *(?:\\n+|$)|([^\\n]+)\\n *(=|-){2,} *(?:\\n+|$)|( *>[^\\n]+(\\n(?! *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$))[^\\n]+)*\\n*)+|<(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|[^\\w\\s@]*@)\\b| *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$)))+)\\n*"));
+        
+        super(VerbalExpression.regex()
+                              .searchOneLine(true)
+                              .startOfLine()
+                              .lineBreak().zeroOrMore()
+                              .capture()
+                              .something().lineBreak()
+                              .endCapture().oneOrMore()
+                              .lineBreak().zeroOrMore()
+                        
+                              .build());
     }
 
     @Override
@@ -60,6 +71,6 @@ public class ParagraphProcessor extends Processor {
 
     @Override
     protected boolean checkParent(Node parent) {
-        return parent.getParent() == null || parent instanceof ListItem || parent instanceof BlockQuote;
+        return parent.getParent() == null || parent instanceof ListItem || parent instanceof Blockquote;
     }
 }

@@ -30,6 +30,7 @@ import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.Code;
 import org.derkani.nevis.element.Node;
 import org.derkani.nevis.element.Text;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,13 +42,23 @@ public class InlineCodeProcessor extends Processor {
 
     public InlineCodeProcessor() {
 
-        super(Pattern.compile("^(`+)\\s*([\\s\\S]*?[^`])\\s*\\1(?!`)"));
+//        super(Pattern.compile("^(`+)\\s*([\\s\\S]*?[^`])\\s*\\1(?!`)"));
+
+        super(VerbalExpression.regex()
+                        .searchOneLine(true)
+                        .startOfLine()
+                        .then("`")
+                        .capture()
+                        .somethingButNot("`")
+                        .endCapture()
+                        .then("`")
+                        .build());
     }
 
     @Override
     public void process(final Node parent, final Matcher matcher, Parser parser) {
 
-        String value = matcher.group(2);
+        String value = matcher.group(1);
         final Code code = new Code();
         code.setParent(parent);
         value = Pattern.compile("&").matcher(value).replaceAll("&amp;");

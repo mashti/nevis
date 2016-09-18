@@ -65,7 +65,7 @@ public abstract class Parser {
             }
 
             if (!match) {
-                throw new RuntimeException("no mach by any processor");
+                throw new RuntimeException("no mach by any processor \n\n" + value);
             }
         }
     }

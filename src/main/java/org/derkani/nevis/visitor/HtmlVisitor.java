@@ -68,8 +68,8 @@ public class HtmlVisitor implements Visitor {
                 visit((HorizontalRule) node);
             } else if (node instanceof Escaped) {
                 visit((Escaped) node);
-            } else if (node instanceof BlockQuote) {
-                visit((BlockQuote) node);
+            } else if (node instanceof Blockquote) {
+                visit((Blockquote) node);
             } else if (node instanceof LinkDefinition) {
                 // do nothing
             } else if (node instanceof Link) {
@@ -150,33 +150,33 @@ public class HtmlVisitor implements Visitor {
         html.append("</p>\n\n");
     }
 
-    public void visit(Bold paragraph) {
+    public void visit(Bold bold) {
 
         html.append("<strong>");
-        visit((Node) paragraph);
+        visit((Node) bold);
         html.append("</strong>");
     }
 
-    public void visit(BreakLine paragraph) {
+    public void visit(BreakLine br) {
 
         html.append("</br>");
-        visit((Node) paragraph);
+        visit((Node) br);
     }
 
-    public void visit(CodeBlock codeBlock) {
+    public void visit(CodeBlock code_block) {
 
         html.append("<pre><code>");
-        visit((Node) codeBlock);
+        visit((Node) code_block);
         html.append("\n</code></pre>\n\n");
 
     }
 
-    public void visit(Html codeBlock) {
+    public void visit(Html html) {
 
-        html.append(codeBlock.getContent());
+        this.html.append(html.getContent());
 
-        if (!codeBlock.isInline()) {
-            html.append("\n\n");
+        if (!html.isInline()) {
+            this.html.append("\n\n");
 
         }
     }
@@ -194,10 +194,10 @@ public class HtmlVisitor implements Visitor {
         html.append("</code>");
     }
 
-    public void visit(BlockQuote code) {
+    public void visit(Blockquote blockquote) {
 
-        html.append("\n<blockquote>\n");
-        visit((Node) code);
+        html.append("<blockquote>\n");
+        visit((Node) blockquote);
         html.append("</blockquote>\n\n");
     }
 
@@ -236,24 +236,24 @@ public class HtmlVisitor implements Visitor {
         html.append("</a>");
     }
 
-    public void visit(Escaped emphasized) {
+    public void visit(Escaped escaped) {
 
-        visit((Node) emphasized);
+        visit((Node) escaped);
     }
 
-    public void visit(ListItem emphasized) {
+    public void visit(ListItem item) {
 
         html.append("<li>");
-        visit((Node) emphasized);
+        visit((Node) item);
         html.append("</li>\n");
     }
 
-    public void visit(List emphasized) {
+    public void visit(List list) {
 
-        final String list_type = (emphasized.isOrdered() ? "o" : "u") + 'l';
+        final String list_type = (list.isOrdered() ? "o" : "u") + 'l';
         html.append('<').append(list_type).append(">\n");
-        visit((Node) emphasized);
-        html.append("</").append(list_type).append(">\n");
+        visit((Node) list);
+        html.append("</").append(list_type).append(">\n\n");
     }
 
     @Override

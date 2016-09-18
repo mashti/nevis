@@ -41,7 +41,7 @@ public class DefinitionProcessor extends Processor {
 
     public DefinitionProcessor() {
 
-        super(Pattern.compile("^ *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$)"));
+        super(Pattern.compile("^\\s*\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$)"));
     }
 
     @Override

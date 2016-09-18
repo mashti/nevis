@@ -36,7 +36,6 @@ public interface Context {
     
     Processor[] getProcessors();
     
-    
     Node getParent();
 
 }

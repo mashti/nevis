@@ -44,13 +44,13 @@ public class MarkdownParser extends Parser {
             new HeadingProcessor(),
             new HeadingSetextProcessor(),
             new HorizontalRuleProcessor(),
-            new BlockQuoteProcessor(),
-            new ListProcessor(),
+            new BlockquoteProcessor(),
             new HtmlTagProcessor(),
             new InlineHtmlTagProcessor(),
             new DefinitionProcessor(),
             new EscapeProcessor(),
             new ListProcessor(),
+            new InlineCodeWithBacktickProcessor(),
             new InlineCodeProcessor(),
             new AutoLinkProcessor(),
             new InlineLinkImageProcessor(),
@@ -61,6 +61,7 @@ public class MarkdownParser extends Parser {
             new BreakLineProcessor(),
             new TextProcessor(),
             new ParagraphProcessor(),
+            new WhitespaceProcessor()
     };
 
     private static final Pattern UNICODE_WHITESPACE = Pattern.compile("\u00a0", Pattern.MULTILINE);

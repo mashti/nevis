@@ -24,34 +24,49 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.derkani.nevis;
+package org.derkani.nevis.processor;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.derkani.nevis.*;
+import org.derkani.nevis.element.*;
+import ru.lanwen.verbalregex.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.util.regex.*;
 
 /**
- * @author masih
+ * @author Masih Hajiarab Derkani
  */
-@Ignore
-public class HtmlToPdfTest {
+public class InlineCodeWithBacktickProcessor extends Processor {
 
-    @Test
-    public void testPdfGeneration() throws Exception {
-        final File inputFile = new File(HtmlToPdfTest.class.getResource("/html_to_pdf/printable.html").toURI());
-        final String outputFile = "target/printable.pdf";
-        OutputStream os = new FileOutputStream(outputFile, false);
+    public InlineCodeWithBacktickProcessor() {
 
-        ITextRenderer renderer = new ITextRenderer();
-        renderer.setDocument(inputFile);
-        renderer.layout();
-        renderer.createPDF(os);
+//        super(Pattern.compile("^(`+)\\s*([\\s\\S]*?[^`])\\s*\\1(?!`)"));
 
-        os.close();
+        super(VerbalExpression.regex()
+                        .searchOneLine(true)
+                        .startOfLine()
+                        .then("``")
+                        .capture()
+                        .something()
+                        .endCapture()
+                        .then("``")
+                        .build());
+    }
 
+    @Override
+    public void process(final Node parent, final Matcher matcher, Parser parser) {
+
+        String value = matcher.group(1);
+        final Code code = new Code();
+        code.setParent(parent);
+        value = Pattern.compile("&").matcher(value).replaceAll("&amp;");
+        value = Pattern.compile("<").matcher(value).replaceAll("&lt;");
+        value = Pattern.compile(">").matcher(value).replaceAll("&gt;");
+        code.addChild(new Text(value.trim()));
+        parent.addChild(code);
+    }
+
+    @Override
+    protected boolean checkParent(Node parent) {
+        return parent.getParent() != null;
     }
 }

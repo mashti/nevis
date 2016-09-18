@@ -29,6 +29,7 @@ package org.derkani.nevis.processor;
 import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.Emphasized;
 import org.derkani.nevis.element.Node;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,17 +41,25 @@ public class EmphasizedProcessor extends Processor {
 
     public EmphasizedProcessor() {
 
-        super(Pattern.compile("^\\b_((?:__|[\\s\\S])+?)_\\b|^\\*((?:\\*\\*|[\\s\\S])+?)\\*(?!\\*)"));
+//        super(Pattern.compile("^\\b_((?:__|[\\s\\S])+?)_\\b|^\\*((?:\\*\\*|[\\s\\S])+?)\\*(?!\\*)"));
+
+        super(VerbalExpression.regex()
+                              .searchOneLine(true)
+                              .startOfLine()
+                              .capture()
+                              .anyOf("_*")
+                              .endCapture()
+                              .capture()
+                              .somethingButNot("_*")
+                              .endCapture()
+                              .add("\\1")
+                              .build());
     }
 
     @Override
     public void process(final Node parent, final Matcher matcher, Parser parser) {
 
         String value = matcher.group(2);
-        if(value == null){
-            
-            value = matcher.group(1);
-        }
         final Emphasized emphasized = new Emphasized();
         emphasized.setParent(parent);
         parser.parse(emphasized, value);

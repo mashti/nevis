@@ -29,6 +29,7 @@ package org.derkani.nevis.processor;
 import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.HorizontalRule;
 import org.derkani.nevis.element.Node;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,7 +41,20 @@ public class HorizontalRuleProcessor extends Processor {
 
     public HorizontalRuleProcessor() {
 
-        super(Pattern.compile("^( {0,3}[-*_]){3,} *(?:\\n+|$)"));
+//        super(Pattern.compile("^( {0,3}[-*_]){3,} *(?:\\n+|$)"));
+        super(VerbalExpression.regex()
+                              .searchOneLine(true)
+                              .startOfLine()
+                              .lineBreak().zeroOrMore()
+                              .then(" ").count(0,3)
+                              .capture()
+                              .anyOf("-*_")
+                              .anyOf(" \\t").zeroOrMore()
+                              .endCapture().atLeast(3)
+                              .then(" ").zeroOrMore()
+                              .lineBreak()
+                              .oneOrMore()
+                              .build());
     }
 
     @Override

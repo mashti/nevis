@@ -37,9 +37,9 @@ import java.util.regex.Pattern;
 /**
  * @author Masih Hajiarab Derkani
  */
-public class BlockquoteProcessor extends Processor {
+public class BlockQuoteProcessor extends Processor {
 
-    public BlockquoteProcessor() {
+    public BlockQuoteProcessor() {
 
 //        super(Pattern.compile("^( *>[^\\n]+(\\n(?! *\\[([^\\]]+)\\]: *<?([^\\s>]+)>?(?: +[\"(]([^\\n]+)[\")])? *(?:\\n+|$))[^\\n]+)*\\n*)+"));
 

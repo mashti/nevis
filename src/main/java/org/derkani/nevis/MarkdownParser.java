@@ -44,7 +44,7 @@ public class MarkdownParser extends Parser {
             new HeadingProcessor(),
             new HeadingSetextProcessor(),
             new HorizontalRuleProcessor(),
-            new BlockquoteProcessor(),
+            new BlockQuoteProcessor(),
             new HtmlTagProcessor(),
             new InlineHtmlTagProcessor(),
             new DefinitionProcessor(),

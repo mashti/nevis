@@ -68,8 +68,8 @@ public class HtmlVisitor implements Visitor {
                 visit((HorizontalRule) node);
             } else if (node instanceof Escaped) {
                 visit((Escaped) node);
-            } else if (node instanceof Blockquote) {
-                visit((Blockquote) node);
+            } else if (node instanceof BlockQuote) {
+                visit((BlockQuote) node);
             } else if (node instanceof LinkDefinition) {
                 // do nothing
             } else if (node instanceof Link) {
@@ -194,7 +194,7 @@ public class HtmlVisitor implements Visitor {
         html.append("</code>");
     }
 
-    public void visit(Blockquote blockquote) {
+    public void visit(BlockQuote blockquote) {
 
         html.append("<blockquote>\n");
         visit((Node) blockquote);

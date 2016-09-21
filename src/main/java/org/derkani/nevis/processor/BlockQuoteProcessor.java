@@ -27,7 +27,7 @@
 package org.derkani.nevis.processor;
 
 import org.derkani.nevis.Parser;
-import org.derkani.nevis.element.Blockquote;
+import org.derkani.nevis.element.BlockQuote;
 import org.derkani.nevis.element.Node;
 import ru.lanwen.verbalregex.*;
 
@@ -62,7 +62,7 @@ public class BlockQuoteProcessor extends Processor {
         String content = matcher.group();
         content = Pattern.compile("^ *> ?", Pattern.MULTILINE).matcher(content).replaceAll("");
 
-        final Blockquote block_quote = new Blockquote();
+        final BlockQuote block_quote = new BlockQuote();
         block_quote.setParent(parent);
         parent.addChild(block_quote);
         if (!content.trim().isEmpty()) {

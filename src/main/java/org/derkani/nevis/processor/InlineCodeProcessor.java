@@ -40,9 +40,14 @@ import java.util.regex.Pattern;
  */
 public class InlineCodeProcessor extends Processor {
 
-    public InlineCodeProcessor() {
+    private static final Pattern AMPERSAND = Pattern.compile("&");
+    private static final Pattern TAG_OPEN = Pattern.compile("<");
+    private static final Pattern TAG_CLOSE = Pattern.compile(">");
+    private static final String AMP = "&amp;";
+    private static final String LT = "&lt;";
+    private static final String GT = "&gt;";
 
-//        super(Pattern.compile("^(`+)\\s*([\\s\\S]*?[^`])\\s*\\1(?!`)"));
+    public InlineCodeProcessor() {
 
         super(VerbalExpression.regex()
                         .searchOneLine(true)
@@ -61,9 +66,9 @@ public class InlineCodeProcessor extends Processor {
         String value = matcher.group(1);
         final Code code = new Code();
         code.setParent(parent);
-        value = Pattern.compile("&").matcher(value).replaceAll("&amp;");
-        value = Pattern.compile("<").matcher(value).replaceAll("&lt;");
-        value = Pattern.compile(">").matcher(value).replaceAll("&gt;");
+        value = AMPERSAND.matcher(value).replaceAll(AMP);
+        value = TAG_OPEN.matcher(value).replaceAll(LT);
+        value = TAG_CLOSE.matcher(value).replaceAll(GT);
         code.addChild(new Text(value.trim()));
         parent.addChild(code);
     }

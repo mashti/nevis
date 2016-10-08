@@ -29,6 +29,7 @@ package org.derkani.nevis.processor;
 import org.derkani.nevis.Parser;
 import org.derkani.nevis.element.Link;
 import org.derkani.nevis.element.Node;
+import ru.lanwen.verbalregex.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,11 +39,33 @@ import java.util.regex.Pattern;
  */
 public class AutoLinkProcessor extends Processor {
 
+    private static final VerbalExpression.Builder URI = VerbalExpression.regex()
+                    .range("a", "z", "A", "Z").oneOrMore().then("://").anything();
+    
+    private static final VerbalExpression.Builder EMAIL = VerbalExpression.regex()
+                    .capture()
+                    .word()
+                    .anyOf("_-=%.").zeroOrMore()
+                    .endCapture().oneOrMore()
+                    .then("@")
+                    .capture()
+                    .wordChar()
+                    .anyOf("-.").zeroOrMore()
+                    .endCapture().oneOrMore()
+                    .then(".")
+                    .range("a", "z", "A", "Z").count(2,6);
+
     public AutoLinkProcessor() {
 
-        super(Pattern.compile("^<([^ >]+://[^ >]+|" +
-                "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))" +
-                ")>"));
+        super(VerbalExpression.regex()
+                              .startOfLine()
+                              .then("<")
+                              .capture()
+                              .add(URI)
+                              .add("|")
+                              .add(EMAIL)
+                              .endCapture()
+                              .then(">").build());
     }
 
     @Override
@@ -58,6 +81,7 @@ public class AutoLinkProcessor extends Processor {
 
     @Override
     protected boolean checkParent(Node parent) {
+
         return parent.getParent() != null;
     }
 }

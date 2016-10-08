@@ -48,7 +48,7 @@ public class AutoLinkProcessor extends Processor {
     private static final VerbalExpression.Builder EMAIL = VerbalExpression.regex()
                     .capture()
                     .word()
-                    .anyOf("_-=%.").zeroOrMore()
+                    .anyOf("_-+%.").zeroOrMore()
                     .endCapture().oneOrMore()
                     .then("@")
                     .capture()

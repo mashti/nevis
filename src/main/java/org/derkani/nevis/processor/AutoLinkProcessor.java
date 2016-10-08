@@ -39,8 +39,11 @@ import java.util.regex.Pattern;
  */
 public class AutoLinkProcessor extends Processor {
 
+    
+    
+    private static final VerbalExpression.Builder LETTER = VerbalExpression.regex().range("a", "z", "A", "Z");
     private static final VerbalExpression.Builder URI = VerbalExpression.regex()
-                    .range("a", "z", "A", "Z").oneOrMore().then("://").anything();
+                    .add(LETTER).oneOrMore().then("://").anything();
     
     private static final VerbalExpression.Builder EMAIL = VerbalExpression.regex()
                     .capture()
@@ -49,11 +52,11 @@ public class AutoLinkProcessor extends Processor {
                     .endCapture().oneOrMore()
                     .then("@")
                     .capture()
-                    .wordChar()
+                    .word()
                     .anyOf("-.").zeroOrMore()
                     .endCapture().oneOrMore()
                     .then(".")
-                    .range("a", "z", "A", "Z").count(2,6);
+                    .add(LETTER).count(2,6);
 
     public AutoLinkProcessor() {
 

@@ -1,0 +1,92 @@
+!!org.derkani.nevis.element.Node
+attributes: {}
+children:
+- !!org.derkani.nevis.element.Heading
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: Valid
+  level: 1
+- !!org.derkani.nevis.element.Paragraph
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Link
+    attributes: {}
+    children:
+    - !!org.derkani.nevis.element.Text
+      attributes: {}
+      children: []
+      value: http://google.com
+    destination: http://google.com
+    id: null
+    match: null
+    title: null
+- !!org.derkani.nevis.element.Paragraph
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Link
+    attributes: {}
+    children:
+    - !!org.derkani.nevis.element.Text
+      attributes: {}
+      children: []
+      value: http://www.google.com
+    destination: http://www.google.com
+    id: null
+    match: null
+    title: null
+- !!org.derkani.nevis.element.Paragraph
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Link
+    attributes: {}
+    children:
+    - !!org.derkani.nevis.element.Text
+      attributes: {}
+      children: []
+      value: example@example.com
+    destination: mailto:example@example.com
+    id: null
+    match: null
+    title: null
+- !!org.derkani.nevis.element.Paragraph
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Link
+    attributes: {}
+    children:
+    - !!org.derkani.nevis.element.Text
+      attributes: {}
+      children: []
+      value: file://test
+    destination: file://test
+    id: null
+    match: null
+    title: null
+- !!org.derkani.nevis.element.HorizontalRule
+  attributes: {}
+  children: []
+- !!org.derkani.nevis.element.Heading
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: Invalid
+  level: 1
+- !!org.derkani.nevis.element.Paragraph
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: <http:/www.google.com>
+- !!org.derkani.nevis.element.Paragraph
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: <example@example,com>

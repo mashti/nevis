@@ -1,0 +1,21 @@
+!!org.derkani.nevis.element.Node
+attributes: {}
+children:
+- !!org.derkani.nevis.element.Paragraph
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: 'This is some '
+  - !!org.derkani.nevis.element.Code
+    attributes: {}
+    children:
+    - !!org.derkani.nevis.element.Text
+      attributes: {}
+      children: []
+      value: inline code
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: .

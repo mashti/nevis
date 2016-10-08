@@ -1,0 +1,21 @@
+!!org.derkani.nevis.element.Node
+attributes: {}
+children:
+- !!org.derkani.nevis.element.Paragraph
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: 'This is a code block:'
+- !!org.derkani.nevis.element.CodeBlock
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: |-
+      some code here
+      and some more followed by a blank line
+
+      and the end of it.

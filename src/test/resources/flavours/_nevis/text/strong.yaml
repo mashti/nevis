@@ -1,0 +1,39 @@
+!!org.derkani.nevis.element.Node
+attributes: {}
+children:
+- !!org.derkani.nevis.element.Paragraph
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: 'This is a text that is '
+  - !!org.derkani.nevis.element.Bold
+    attributes: {}
+    children:
+    - !!org.derkani.nevis.element.Text
+      attributes: {}
+      children: []
+      value: bold
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: .
+- !!org.derkani.nevis.element.Paragraph
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: 'This is a text that is also '
+  - !!org.derkani.nevis.element.Bold
+    attributes: {}
+    children:
+    - !!org.derkani.nevis.element.Text
+      attributes: {}
+      children: []
+      value: bold
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: .

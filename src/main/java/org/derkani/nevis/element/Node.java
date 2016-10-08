@@ -26,12 +26,10 @@
  */
 package org.derkani.nevis.element;
 
-import org.derkani.nevis.visitor.Visitor;
+import org.derkani.nevis.visitor.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * @author Masih Hajiarab Derkani
@@ -40,7 +38,7 @@ public class Node {
 
     private java.util.List<Node> children;
     private Map<String, String> attributes;
-    private Node parent;
+    private transient Node parent;
 
     public Node() {
 
@@ -58,7 +56,7 @@ public class Node {
 
     public java.util.List<Node> getChildren() {
 
-        return new CopyOnWriteArrayList<Node>(children);
+        return new CopyOnWriteArrayList<>(children);
     }
 
     public void setChildren(java.util.List<Node> children) {

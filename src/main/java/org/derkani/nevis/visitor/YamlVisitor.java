@@ -27,7 +27,8 @@
 package org.derkani.nevis.visitor;
 
 import org.derkani.nevis.element.*;
-import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.*;
+import org.yaml.snakeyaml.introspector.*;
 
 /**
  * @author masih
@@ -50,6 +51,8 @@ public class YamlVisitor implements Visitor {
 
     @Override
     public String toString() {
+
+        yaml.setBeanAccess(BeanAccess.FIELD);
         return yaml.dump(node);
     }
 }

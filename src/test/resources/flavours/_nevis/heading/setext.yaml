@@ -1,0 +1,35 @@
+!!org.derkani.nevis.element.Node
+attributes: {}
+children:
+- !!org.derkani.nevis.element.Heading
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: some heading
+  level: 1
+- !!org.derkani.nevis.element.Heading
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: heading 2
+  level: 2
+- !!org.derkani.nevis.element.Heading
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: heading
+  level: 1
+- !!org.derkani.nevis.element.Heading
+  attributes: {}
+  children:
+  - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
+    value: another heading
+  level: 2

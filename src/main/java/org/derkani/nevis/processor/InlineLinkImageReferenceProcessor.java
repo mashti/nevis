@@ -26,14 +26,11 @@
  */
 package org.derkani.nevis.processor;
 
-import org.derkani.nevis.Parser;
-import org.derkani.nevis.element.Image;
-import org.derkani.nevis.element.Link;
-import org.derkani.nevis.element.Node;
+import org.derkani.nevis.*;
+import org.derkani.nevis.element.*;
 import ru.lanwen.verbalregex.*;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 /**
  * @author Masih Hajiarab Derkani
@@ -42,22 +39,37 @@ public class InlineLinkImageReferenceProcessor extends Processor {
 
     public InlineLinkImageReferenceProcessor() {
 
-//        super(Pattern.compile("^!?\\[((?:\\[[^\\]]*\\]|[^\\[\\]\\\\])*)\\]"));
         super(VerbalExpression.regex()
-                        .startOfLine()
-                        .searchOneLine(true)
-                        .maybe("!")
-                        .then("[")
-                        .capture()
-                        .somethingButNot("[]\\")
-                        .endCapture()
-                        .then("]").build());
+                              .startOfLine()
+                              .searchOneLine(true)
+                              .maybe("!")
+                              .then("[")
+                              .capture()
+                              .somethingButNot("]\\")
+                              .endCapture()
+                              .then("]")
+                              .space().zeroOrMore()
+                              .then("[")
+                              .capture()
+                              .anythingBut("]\\")
+                              .endCapture()
+                              .then("]")
+                              .build());
     }
 
     @Override
     public void process(final Node parent, final Matcher matcher, Parser parser) {
 
-        String id = matcher.group(1);
+
+        String id = matcher.group(2);
+        String text = matcher.group(1);
+
+        if (id.isEmpty()) {
+            id = text;
+        }
+
+        id = id.replaceAll("\\n", " ");
+
         final String match = matcher.group();
 
         if (match.startsWith("!")) {
@@ -65,17 +77,15 @@ public class InlineLinkImageReferenceProcessor extends Processor {
             final Image image = new Image(null);
             image.setParent(parent);
             image.setMatch(match);
-            id = id.replaceAll(" *\\n", " ");
             image.setId(id);
-
             parser.parse(image, id);
             parent.addChild(image);
         } else {
             final Link link = new Link(null);
             link.setParent(parent);
             link.setMatch(match);
-            parser.parse(link, id);
-            link.setId(id.replaceAll(" *\\n", " "));
+            link.setId(id);
+            parser.parse(link, text);
             parent.addChild(link);
         }
     }

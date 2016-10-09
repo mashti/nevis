@@ -26,10 +26,10 @@
  */
 package org.derkani.nevis;
 
+import org.derkani.nevis.element.*;
 import org.derkani.nevis.processor.*;
-import org.derkani.nevis.element.Node;
 
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 /**
  * @author Masih Hajiarab Derkani
@@ -54,7 +54,6 @@ public class MarkdownParser extends Parser {
             new InlineCodeProcessor(),
             new AutoLinkProcessor(),
             new InlineLinkImageProcessor(),
-            new InlineLinkProcessor(),
             new InlineLinkImageReferenceProcessor(),
             new StrongProcessor(),
             new EmphasizedProcessor(),

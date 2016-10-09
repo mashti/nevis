@@ -26,13 +26,11 @@
  */
 package org.derkani.nevis.processor;
 
-import org.derkani.nevis.Parser;
-import org.derkani.nevis.element.Image;
-import org.derkani.nevis.element.Link;
-import org.derkani.nevis.element.Node;
+import org.derkani.nevis.*;
+import org.derkani.nevis.element.*;
+import ru.lanwen.verbalregex.*;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 /**
  * @author Masih Hajiarab Derkani
@@ -41,7 +39,28 @@ public class InlineLinkImageProcessor extends Processor {
 
     public InlineLinkImageProcessor() {
 
-        super(Pattern.compile("^!?\\[((?:\\[[^\\]]*\\]|[^\\[\\]]|\\](?=[^\\[]*\\]))*)\\]\\(\\s*<?([\\s\\S]*?)>?(?:\\s+['\"]([\\s\\S]*?)['\"])?\\s*\\)"));
+        super(VerbalExpression.regex()
+                              .startOfLine()
+                              .searchOneLine(true)
+                              .maybe("!")
+                              .then("[")
+                              .capture()
+                              .somethingButNot("[]\\")
+                              .endCapture()
+                              .then("]")
+                              .then("(")
+                              .capture()
+                              .somethingButNot(" \"")
+                              .endCapture()
+                              .capture()
+                              .then(" \"")
+                              .capture()
+                              .somethingButNot("\")")
+                              .endCapture()
+                              .then("\"")
+                              .endCapture().count(0, 1)
+                              .then(")")
+                              .build());
     }
 
     @Override
@@ -50,7 +69,7 @@ public class InlineLinkImageProcessor extends Processor {
         final boolean isImage = matcher.group().startsWith("!");
         final String alt = matcher.group(1);
         final String source = matcher.group(2);
-        final String title = matcher.group(3);
+        final String title = matcher.group(4);
 
 
         if (isImage) {

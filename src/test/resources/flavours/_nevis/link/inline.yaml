@@ -1,37 +1,71 @@
 !!org.derkani.nevis.element.Node
+attributes: {}
 children:
 - !!org.derkani.nevis.element.Paragraph
+  attributes: {}
   children:
   - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
     value: 'This is the simplest example of an '
-  - !!org.derkani.nevis.element.Image
-    alt: image
+  - !!org.derkani.nevis.element.Link
+    alt: hyperlink
+    attributes: {}
+    children: []
+    id: null
+    match: null
     source: mmd.png
+    title: null
   - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
     value: ' embedded in a paragraph.'
 - !!org.derkani.nevis.element.Paragraph
+  attributes: {}
   children:
   - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
     value: 'This is an image example with a title attribute '
   - !!org.derkani.nevis.element.Image
     alt: Alternate Message
+    attributes: {}
+    children: []
+    id: null
+    match: null
     source: mmd.png
     title: This is a title
   - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
     value: ' embedded in a paragraph.'
 - !!org.derkani.nevis.element.Paragraph
+  attributes: {}
   children:
   - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
     value: 'This is the same image '
   - !!org.derkani.nevis.element.Image
+    alt: null
+    attributes: {}
     children:
     - !!org.derkani.nevis.element.Text
+      attributes: {}
+      children: []
       value: image3
     id: image3
     match: '![image3][]'
+    source: null
+    title: null
   - !!org.derkani.nevis.element.Text
+    attributes: {}
+    children: []
     value: ' but with the attributes placed later on in the document.'
 - !!org.derkani.nevis.element.LinkDefinition
+  attributes: {}
+  children: []
   destination: mmd.png
   id: image3
+  match: null
   title: This is where the title goes

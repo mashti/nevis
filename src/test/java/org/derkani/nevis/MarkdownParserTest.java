@@ -26,28 +26,21 @@
  */
 package org.derkani.nevis;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.derkani.nevis.visitor.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.apache.commons.io.*;
 import org.derkani.nevis.element.Node;
+import org.derkani.nevis.visitor.*;
+import org.junit.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.nio.file.*;
+import java.util.*;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * @author Masih Hajiarab Derkani
@@ -89,7 +82,7 @@ public class MarkdownParserTest {
 
             final String flavour_name = flavour.getFileName().toString();
 
-            if (flavour_name.equals("_nevis")) { //Markdown103
+            if (flavour_name.equals("Markdown103")) { //Markdown103
                 getMarkdownFiles(flavour.toFile()).forEach(md_file -> {
                     params.add(new Object[]{flavour_name, md_file, getHtmlFile(md_file)});
                 });
